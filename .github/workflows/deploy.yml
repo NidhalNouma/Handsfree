@@ -9,5 +9,5 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: cp ~/.env ./
-      - run: docker build -t  nidhal/stripeexample .
-      - run: docker run -dp 80:8080 nidhal/stripeexample
+      - run: sudo docker build -t  nidhal/stripeexample .
+      - run: sudo docker run -dp 80:8080 nidhal/stripeexample
