@@ -1,0 +1,13 @@
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: self-hosted
+
+    steps:
+      - uses: actions/checkout@v2
+      - run: cp ~/.env ./
+      - run: docker build -t  nidhal/stripeexample .
+      - run: docker run -dp 80:8080 nidhal/stripeexample
