@@ -9,6 +9,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: cp ~/.env ./
-      - run: sudo docker build -t  nidhal/stripeexample .
+      - run: sudo docker container restart nidhal/stripeexample
+      # - run: sudo docker build -t nidhal/stripeexample -f nidhal/stripeexample  .
       # - run: sudo docker run -dp 80:8080 nidhal/stripeexample
-      - run: sudo docker restart nidhal/stripeexample
