@@ -8,8 +8,9 @@ require("dotenv").config({ path: "./.env" });
 if (
   !process.env.STRIPE_SECRET_KEY ||
   !process.env.STRIPE_PUBLISHABLE_KEY ||
-  !process.env.BASIC ||
-  !process.env.PREMIUM ||
+  !process.env.FOREX ||
+  !process.env.CRYPTO ||
+  !process.env.INDICES ||
   !process.env.STATIC_DIR
 ) {
   console.log(
@@ -24,16 +25,22 @@ if (
     ? ""
     : console.log("Add STRIPE_PUBLISHABLE_KEY to your .env file.");
 
-  process.env.BASIC
+  process.env.FOREX
     ? ""
     : console.log(
-        "Add BASIC priceID to your .env file. See repo readme for setup instructions."
+        "Add Forex priceID to your .env file. See repo readme for setup instructions."
       );
 
-  process.env.PREMIUM
+  process.env.INDICES
     ? ""
     : console.log(
-        "Add PREMIUM priceID to your .env file. See repo readme for setup instructions."
+        "Add Indices priceID to your .env file. See repo readme for setup instructions."
+      );
+
+  process.env.CRYPTO
+    ? ""
+    : console.log(
+        "Add Crypto priceID to your .env file. See repo readme for setup instructions."
       );
 
   process.env.STATIC_DIR
@@ -73,6 +80,8 @@ app.post("/create-customer", async (req, res) => {
   const customer = await stripe.customers.create({
     email: req.body.email,
   });
+
+  // console.log(customer);
 
   // save the customer.id as stripeCustomerId
   // in your database.

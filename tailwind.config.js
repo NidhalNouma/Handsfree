@@ -1,12 +1,12 @@
 module.exports = {
-  purge: ['../../client/**/*.html'],
+  purge: ["./client/*.html"],
   theme: {
     fontFamily: {
-      body: ['-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+      body: ["-apple-system", "BlinkMacSystemFont", "sans-serif"],
     },
     extend: {
       colors: {
-        pasha: '#ed5f74',
+        pasha: "#ad2218",
       },
     },
   },
