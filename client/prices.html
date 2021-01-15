@@ -187,7 +187,7 @@
               Enter your card details. </br>Your subscription will start now.
             </div>
             <p class="text-gray-700 text-base">
-              → Total due now <span id="total-due-now">$0.00</span>
+              → Total due now <span id="total-due-now">$0.00</span><span class="spanCou" id="discountCOU"></span>
             </p>
             <p id="price-selected" class="text-gray-700 text-base mb-4"></p>
 
@@ -201,12 +201,22 @@
                     Coupon
                   </label>
                   <input
-                    class="appearance-none block w-full bg-gray-200 border rounded-md py-3 px-2 mb-3 leading-tight focus:outline-none focus:bg-white"
+                    class="appearance-none block bg-gray-200 border rounded-md py-3 px-2 mb-3 leading-tight focus:outline-none focus:bg-white"
                     id="coupon"
                     type="text"
                     placeholder="Coupon code"
                     required
                   />
+                  <button
+                    id="coupon-btn"
+                    class="bg-pasha hover:bg-white hover:shadow-outline hover:text-pasha hover:border hover:border-black focus:shadow-outline text-white focus:bg-white focus:text-pasha font-light py-2 px-4 rounded-md"
+                    type="submit"
+                  >
+                    <div class="">
+                      <div id="checking-cou" class="hidden">Checking...</div>
+                      <span id="check-cou" class="">Check coupon</span>
+                    </div>
+                  </button>
                 </div>
               </div>
               <div class="flex flex-wrap -mx-3 mb-2">

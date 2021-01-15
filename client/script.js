@@ -99,6 +99,55 @@ function stripeElements(publishableKey) {
       }
     });
   }
+
+  const coupon = document.getElementById("coupon-btn");
+  if (coupon) {
+    coupon.addEventListener("click", function (e) {
+      const cou = document.getElementById("coupon");
+      if (!cou.value) {
+        const pr = document.getElementById("discountCOU");
+        if (pr) pr.innerText = "";
+        return;
+      }
+      document.querySelector("#check-cou").classList.add("hidden");
+      document.querySelector("#checking-cou").classList.remove("hidden");
+      fetch("/check-coupon", {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          coupon: cou.value,
+        }),
+      })
+        .then((response) => {
+          return response.json();
+        })
+        .then((res) => {
+          if (res.res) {
+            console.log(res.res);
+            const pof = res.res.percent_off;
+            const aof = res.res.amount_off;
+            if (pof) {
+              const pr = document.getElementById("discountCOU");
+              if (pr) pr.innerText = "  -" + pof + "%";
+            } else if (aof) {
+              const pr = document.getElementById("discountCOU");
+              if (pr) pr.innerText = "  -$" + (aof / 100).toFixed(2);
+            } else {
+              const pr = document.getElementById("discountCOU");
+              if (pr) pr.innerText = "";
+            }
+          } else {
+            const pr = document.getElementById("discountCOU");
+            if (pr) pr.innerText = "";
+          }
+          document.querySelector("#check-cou").classList.remove("hidden");
+          document.querySelector("#checking-cou").classList.add("hidden");
+        })
+        .catch((e) => console.error(e));
+    });
+  }
 }
 
 function displayError(event) {

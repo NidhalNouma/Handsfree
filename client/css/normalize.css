@@ -13,6 +13,15 @@ html {
   -webkit-text-size-adjust: 100%; /* 2 */
 }
 
+.spanCou {
+  color: #34d399;
+  font-weight: bold;
+}
+
+.vid {
+  border-radius: 14px;
+}
+
 /* Sections
    ========================================================================== */
 

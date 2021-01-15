@@ -304,6 +304,16 @@ app.post("/customer", async function (req, res) {
   res.json(r);
 });
 
+app.post("/check-coupon", async function (req, res) {
+  const r = { res: null, err: null };
+  try {
+    r.res = await stripe.coupons.retrieve(req.body.coupon);
+  } catch (e) {
+    r.err = e;
+  }
+  res.json(r);
+});
+
 const port = process.env.PORT || 8080;
 
 app.listen(port, () => console.log(`Node server listening on port ${port}!`));

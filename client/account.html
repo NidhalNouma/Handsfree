@@ -28,7 +28,7 @@
         </button>
       </div>
     </nav>
-    <div id="subscription-cancelled" class="hidden">
+    <!-- <div id="subscription-cancelled" class="hidden">
       <div class="flex flex-wrap font-bold text-pasha text-xl mt-6 mb-2">
         Subscription canceled
       </div>
@@ -41,7 +41,7 @@
           Restart demo
         </button>
       </div>
-    </div>
+    </div> -->
     <div id="subscription-settings">
       <div class="flex flex-wrap justify-center mt-4">
         <div class="md:w-2/5 w-full inline-block rounded-md p-4">
@@ -74,7 +74,7 @@
               ></span>
             </div>
 
-            <div
+            <!-- <div
               class="flex justify-between mt-2 mb-2 text-gray-900 font-bold text-xl cursor-pointer"
               onClick="changePrice()"
             >
@@ -85,8 +85,18 @@
               onClick="cancelSubscription()"
             >
               <span>Cancel subscription <span>→</span></span>
-            </div>
+            </div> -->
           </div>
+          <button
+            id="coupon-btn"
+            class="mt-4 w-full bg-pasha hover:bg-white hover:shadow-outline hover:text-pasha hover:border hover:border-black focus:shadow-outline text-white focus:bg-white focus:text-pasha font-light py-2 px-4 rounded-md"
+            type="submit"
+          >
+            <div class="">
+              <div id="checking-cou" class="hidden">Downloading...</div>
+              <span id="check-cou" class="">Download EA</span>
+            </div>
+          </button>
 
           <div id="prices-form" class="w-full mr-4 md:mb-8 hidden">
             <div class="text-center text-pasha font-bold text-2xl mt-4 mb-6">

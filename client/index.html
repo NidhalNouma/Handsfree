@@ -22,10 +22,14 @@
     <div class="flex justify-center">
       <div class="w-full max-w-sm m-6">
         <div class="w-1/3 flex items-center mb-8">
-          <img
+          <!-- <img
             class="flex-1 w-24"
             src="images/email.svg"
-          />
+          /> -->
+          <video id="vidAu" width="320" height="240" class="flex-1 w-24 vid" muted autoplay>
+            <source src="images/video.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
         </div>
         <div class="text-pasha font-semibold text-xl mb-4" style="text-align: center">
           Subscribe to the DominateForex HandsFree Robot. Cancel anytime.
@@ -62,4 +66,17 @@
    
   </body>
   <footer class="h-24"></footer>
+  <script>
+   let vid = document.getElementById('vidAu')
+   vid.play()
+   var pausing_function = function(){
+    if(this.currentTime >= 6) {
+        this.pause();
+
+        this.removeEventListener("timeupdate",pausing_function);
+      }
+    };  
+
+   vid.addEventListener("timeupdate",pausing_function)
+</script>
 </html>
