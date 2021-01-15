@@ -267,6 +267,39 @@ app.post(
   }
 );
 
+app.post("/customer", async function (req, res) {
+  const customers = await stripe.customers.list({
+    email: req.body.email,
+  });
+
+  const r = { found: false, sub: false, result: null };
+  const { data } = customers;
+  if (data.length > 0) {
+    r.found = true;
+    r.result = data.map((i) => {
+      let sub = [];
+      if (i.subscriptions.data && i.subscriptions.data.length > 0) {
+        i.subscriptions.data.map((i) => {
+          const item = i.items;
+          if (item.data && item.data.length > 0) {
+            r.sub = true;
+            item.data.map((i) => {
+              sub.push({ priceId: i.price.id, productId: i.price.product });
+            });
+          }
+        });
+      }
+      return {
+        email: i.email,
+        id: i.id,
+        sub: sub,
+      };
+    });
+  }
+
+  res.json(r);
+});
+
 const port = process.env.PORT || 8080;
 
 app.listen(port, () => console.log(`Node server listening on port ${port}!`));
