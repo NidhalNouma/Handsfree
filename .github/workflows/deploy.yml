@@ -8,7 +8,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      - run: rm .env
       - run: cp ~/.env ./
-      - run: docker rm --force admiring_maxwell
-      - run: docker build -t nidhal/stripeexample -f  .
-      - run: docker run -dp 80:8080 nidhal/stripeexample
+      - run: docker --no-cache build -t nidhal/stripe -f nidhal/stripe .
+      - run: docker run -dp 80:8080 nidhal/stripe

@@ -268,11 +268,15 @@ app.post(
 );
 
 app.post("/customer", async function (req, res) {
+  const r = { found: false, sub: false, result: null };
+  if (!req.body.email) {
+    res.json(r);
+    return;
+  }
   const customers = await stripe.customers.list({
     email: req.body.email,
   });
 
-  const r = { found: false, sub: false, result: null };
   const { data } = customers;
   if (data.length > 0) {
     r.found = true;
@@ -292,7 +296,7 @@ app.post("/customer", async function (req, res) {
       return {
         email: i.email,
         id: i.id,
-        sub: sub,
+        subs: sub,
       };
     });
   }
