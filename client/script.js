@@ -79,7 +79,6 @@ function stripeElements(publishableKey) {
     paymentForm.addEventListener("submit", function (evt) {
       evt.preventDefault();
       changeLoadingStateprices(true);
-
       // If a previous payment was attempted, get the lastest invoice
       const latestInvoicePaymentIntentStatus = localStorage.getItem(
         "latestInvoicePaymentIntentStatus"
@@ -117,8 +116,8 @@ function createPaymentMethod({ card, isPaymentRetry, invoiceId }) {
   const customerId = params.get("customerId");
   // Set up payment method for recurring usage
   let billingName = document.querySelector("#name").value;
-
   let priceId = document.getElementById("priceId").innerHTML.toUpperCase();
+  let coupon = document.querySelector("#coupon").value;
 
   stripe
     .createPaymentMethod({
@@ -138,11 +137,17 @@ function createPaymentMethod({ card, isPaymentRetry, invoiceId }) {
             customerId,
             result.paymentMethod.id,
             invoiceId,
-            priceId
+            priceId,
+            coupon
           );
         } else {
           // Create the subscription
-          createSubscription(customerId, result.paymentMethod.id, priceId);
+          createSubscription(
+            customerId,
+            result.paymentMethod.id,
+            priceId,
+            coupon
+          );
         }
       }
     });
@@ -197,7 +202,6 @@ function switchPrices(newPriceIdSelected) {
   changePriceSelection(newPriceIdSelected);
 
   changeLoadingStateprices(true);
-
   // Retrieve the upcoming invoice to display details about
   // the price change
   retrieveUpcomingInvoice(customerId, subscriptionId, newPriceIdSelected).then(
@@ -394,7 +398,7 @@ function onSubscriptionComplete(result) {
   // Get the product by using result.subscription.price.product
 }
 
-function createSubscription(customerId, paymentMethodId, priceId) {
+function createSubscription(customerId, paymentMethodId, priceId, coupon) {
   return (
     fetch("/create-subscription", {
       method: "post",
@@ -405,6 +409,7 @@ function createSubscription(customerId, paymentMethodId, priceId) {
         customerId: customerId,
         paymentMethodId: paymentMethodId,
         priceId: priceId,
+        coupon: coupon,
       }),
     })
       .then((response) => {

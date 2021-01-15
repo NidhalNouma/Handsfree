@@ -113,6 +113,7 @@ app.post("/create-subscription", async (req, res) => {
     customer: req.body.customerId,
     items: [{ price: process.env[req.body.priceId] }],
     expand: ["latest_invoice.payment_intent", "pending_setup_intent"],
+    coupon: req.body.coupon,
   });
 
   res.send(subscription);
