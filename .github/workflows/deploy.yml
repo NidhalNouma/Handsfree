@@ -8,7 +8,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - run: rm .env
       - run: cp ~/.env ./
-      - run: docker --no-cache build -t nidhal/stripe -f nidhal/stripe .
+      - run: docker rm $(docker ps -a -q)
+      - run: docker build -t nidhal/stripe .
       - run: docker run -dp 80:8080 nidhal/stripe

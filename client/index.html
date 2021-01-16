@@ -26,7 +26,7 @@
             class="flex-1 w-24"
             src="images/email.svg"
           /> -->
-          <video id="vidAu" width="320" height="240" class="flex-1 w-24 vid" muted autoplay>
+          <video id="vidAu" width="320" height="240" class="flex-1 w-24 vid" muted autoplay controls>
             <source src="images/video.mp4" type="video/mp4">
             Your browser does not support the video tag.
           </video>
@@ -70,7 +70,7 @@
    let vid = document.getElementById('vidAu')
    vid.play()
    var pausing_function = function(){
-    if(this.currentTime >= 6) {
+    if(this.currentTime >= 7) {
         this.pause();
 
         this.removeEventListener("timeupdate",pausing_function);
