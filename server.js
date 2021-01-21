@@ -76,9 +76,15 @@ app.get("/config", async (req, res) => {
 
 app.post("/create-customer", async (req, res) => {
   // Create a new customer object
-  const customer = await stripe.customers.create({
+
+  let customer = await stripe.customers.list({
     email: req.body.email,
   });
+  if (customer.data.length === 0) {
+    customer = await stripe.customers.create({
+      email: req.body.email,
+    });
+  }
 
   // console.log(customer);
 
@@ -275,35 +281,32 @@ app.post("/customer", async function (req, res) {
   const customers = await stripe.customers.list({
     email: req.body.email,
   });
+  const subscriptions = await stripe.subscriptions.list({
+    customer: customers.data[0].id,
+  });
 
   // return res.json(customers);
 
-  const { data } = customers;
+  const { data } = subscriptions;
+
   if (data.length > 0) {
     r.found = true;
     r.result = data.map((i) => {
       let sub = [];
-      if (i.subscriptions.data && i.subscriptions.data.length > 0) {
-        i.subscriptions.data.map((i) => {
-          const item = i.items;
-          if (item.data && item.data.length > 0) {
-            item.data.map((i) => {
-              let type = null;
-              if (i.price.id == process.env.FOREX) {
-                type = "FOREX";
-                if (type === req.body.type) r.sub = true;
-              } else if (i.price.id == process.env.CRYPTO) {
-                type = "CRYPTO";
-                if (type === req.body.type) r.sub = true;
-              } else if (i.price.id == process.env.INDICES) {
-                type = "INDICES";
-                if (type === req.body.type) r.sub = true;
-              }
-              sub.push(type);
-              r.type = type;
-            });
-          }
-        });
+      if (i.plan) {
+        let type = null;
+        if (i.plan.id == process.env.FOREX) {
+          type = "FOREX";
+          if (type === req.body.type) r.sub = true;
+        } else if (i.plan.id == process.env.CRYPTO) {
+          type = "CRYPTO";
+          if (type === req.body.type) r.sub = true;
+        } else if (i.plan.id == process.env.INDICES) {
+          type = "INDICES";
+          if (type === req.body.type) r.sub = true;
+        }
+        sub.push(type);
+        r.type = type;
       }
       return {
         email: i.email,
