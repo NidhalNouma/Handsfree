@@ -706,9 +706,14 @@ function getCustomersPaymentMethod() {
         " •••• " +
         response.card.last4;
 
-      document.getElementById(
-        "subscribed-price"
-      ).innerText = capitalizeFirstLetter(params.get("priceId"));
+      const name = capitalizeFirstLetter(params.get("priceId"));
+      document.getElementById("subscribed-price").innerText = name;
+      const dnl = "Robot/" + name + " HandsFree Robot.ex4";
+      document
+        .getElementById("coupon-btn")
+        .addEventListener("click", function (e) {
+          window.location = dnl;
+        });
     });
   }
 }

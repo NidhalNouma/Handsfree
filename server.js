@@ -2,7 +2,6 @@ const express = require("express");
 const app = express();
 const { resolve } = require("path");
 const bodyParser = require("body-parser");
-// Replace if using a different env file or config
 require("dotenv").config({ path: "./.env" });
 
 if (
@@ -288,15 +287,17 @@ app.post("/customer", async function (req, res) {
         i.subscriptions.data.map((i) => {
           const item = i.items;
           if (item.data && item.data.length > 0) {
-            r.sub = true;
             item.data.map((i) => {
               let type = null;
               if (i.price.id == process.env.FOREX) {
                 type = "FOREX";
+                if (type === req.body.type) r.sub = true;
               } else if (i.price.id == process.env.CRYPTO) {
                 type = "CRYPTO";
+                if (type === req.body.type) r.sub = true;
               } else if (i.price.id == process.env.INDICES) {
                 type = "INDICES";
+                if (type === req.body.type) r.sub = true;
               }
               sub.push(type);
               r.type = type;
