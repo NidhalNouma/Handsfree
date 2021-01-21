@@ -9,5 +9,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: cp ~/.env ./
+      # - run: docker-compose up -d --build
       - run: docker build -t nidhal/stripe .
       - run: docker run -dp 80:8080 nidhal/stripe

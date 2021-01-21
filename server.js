@@ -80,13 +80,14 @@ app.post("/create-customer", async (req, res) => {
   let customer = await stripe.customers.list({
     email: req.body.email,
   });
+
   if (customer.data.length === 0) {
     customer = await stripe.customers.create({
       email: req.body.email,
     });
+  } else {
+    customer = customer.data[0];
   }
-
-  // console.log(customer);
 
   // save the customer.id as stripeCustomerId
   // in your database.
@@ -274,15 +275,19 @@ app.post(
 
 app.post("/customer", async function (req, res) {
   const r = { found: false, type: null, sub: false, result: null };
-  if (!req.body.email) {
+  if (!req.body.email && !req.body.id) {
     res.json(r);
     return;
   }
-  const customers = await stripe.customers.list({
-    email: req.body.email,
-  });
+  let customers = req.body.id;
+  if (!customers) {
+    customers = await stripe.customers.list({
+      email: req.body.email,
+    });
+    customers = customers.data[0].id;
+  }
   const subscriptions = await stripe.subscriptions.list({
-    customer: customers.data[0].id,
+    customer: customers,
   });
 
   // return res.json(customers);

@@ -73,7 +73,7 @@
 
               <div class="flex justify-center mt-6">
                 <button
-                  id="submit-basic"
+                  id="submit-Forex"
                   onClick="goToPaymentPage('Forex')"
                   class="bg-pasha hover:bg-white outline-none hover:text-pasha hover:border hover:border-black text-white focus:bg-white focus:text-pasha font-light py-2 px-4 rounded-lg"
                   type="submit"
@@ -83,6 +83,18 @@
                     class="w-auto -mx-2 md:mx-0"
                   >
                     Select
+                  </div>
+                </button>
+                <button
+                  id="Download-Forex"
+                  class="hidden bg-pasha hover:bg-white outline-none hover:text-pasha hover:border hover:border-black text-white focus:bg-white focus:text-pasha font-light py-2 px-4 rounded-lg"
+                  type="submit"
+                >
+                  <div
+                    id="Forex"
+                    class="w-auto -mx-2 md:mx-0"
+                  >
+                    Download
                   </div>
                 </button>
               </div>
@@ -124,7 +136,7 @@
               </div>
               <div class="flex justify-center mt-6">
                 <button
-                  id="submit-premium"
+                  id="submit-Crypto"
                   onClick="goToPaymentPage('Crypto')"
                   class="bg-pasha hover:bg-white outline-none hover:text-pasha hover:border hover:border-black text-white focus:bg-white focus:text-pasha font-light py-2 px-4 rounded-lg"
                   type="submit"
@@ -134,6 +146,18 @@
                     class="w-auto -mx-2 md:mx-0"
                   >
                     Select
+                  </div>
+                </button>
+                <button
+                  id="Download-Crypto"
+                  class="hidden bg-pasha hover:bg-white outline-none hover:text-pasha hover:border hover:border-black text-white focus:bg-white focus:text-pasha font-light py-2 px-4 rounded-lg"
+                  type="submit"
+                >
+                  <div
+                    id="Crypto"
+                    class="w-auto -mx-2 md:mx-0"
+                  >
+                    Download
                   </div>
                 </button>
               </div>
@@ -175,7 +199,7 @@
               </div>
               <div class="flex justify-center mt-6">
                 <button
-                  id="submit-premium"
+                  id="submit-Indices"
                   onClick="goToPaymentPage('Indices')"
                   class="bg-pasha hover:bg-white outline-none hover:text-pasha hover:border hover:border-black text-white focus:bg-white focus:text-pasha font-light py-2 px-4 rounded-lg"
                   type="submit"
@@ -185,6 +209,18 @@
                     class="w-auto -mx-2 md:mx-0"
                   >
                     Select
+                  </div>
+                </button>
+                <button
+                  id="Download-Indices"
+                  class="hidden bg-pasha hover:bg-white outline-none hover:text-pasha hover:border hover:border-black text-white focus:bg-white focus:text-pasha font-light py-2 px-4 rounded-lg"
+                  type="submit"
+                >
+                  <div
+                    id="Indices"
+                    class="w-auto -mx-2 md:mx-0"
+                  >
+                    Download
                   </div>
                 </button>
               </div>
@@ -285,4 +321,60 @@
     </div>
   </body>
   <footer class="h-24"></footer>
+
+<script>
+  const params = new URLSearchParams(document.location.search.substring(1));
+  const customerId = params.get("customerId");
+  fetch("/customer", {
+    method: "post",
+    headers: {
+      "Content-type": "application/json",
+    },
+    body: JSON.stringify({
+      id: customerId,
+    }),
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .then((response) => {
+      if(response.result){
+        response.result.map(i=>{
+          if(i.subs.length>0){
+            i.subs.map(it=>{
+              if(it==="FOREX") {
+                document.getElementById("submit-Forex").classList.add("hidden")
+                const btn = document.getElementById("Download-Forex")
+                btn.classList.remove("hidden")
+                const dnl = "Robot/Forex HandsFree Robot.ex4";
+                btn.addEventListener("click", function (e) {
+                    window.location = dnl;
+                  });
+              }
+              if(it==="CRYPTO") {
+                document.getElementById("submit-Crypto").classList.add("hidden")
+                const btn = document.getElementById("Download-Crypto")
+                btn.classList.remove("hidden")
+                const dnl = "Robot/Crypto HandsFree Robot.ex4";
+                btn.addEventListener("click", function (e) {
+                    window.location = dnl;
+                  });
+              }
+              if(it==="INDICES") {
+                document.getElementById("submit-Indices").classList.add("hidden")
+                const btn = document.getElementById("Download-Indices")
+                btn.classList.remove("hidden")
+                const dnl = "Robot/Indices HandsFree Robot.ex4";
+                btn.addEventListener("click", function (e) {
+                    window.location = dnl;
+                  });
+              }
+              console.log(it)
+            })
+          }
+        })
+      }
+    });
+</script>
+
 </html>
