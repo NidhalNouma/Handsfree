@@ -268,7 +268,7 @@ app.post(
 );
 
 app.post("/customer", async function (req, res) {
-  const r = { found: false, sub: false, result: null };
+  const r = { found: false, type: null, sub: false, result: null };
   if (!req.body.email) {
     res.json(r);
     return;
@@ -276,6 +276,8 @@ app.post("/customer", async function (req, res) {
   const customers = await stripe.customers.list({
     email: req.body.email,
   });
+
+  // return res.json(customers);
 
   const { data } = customers;
   if (data.length > 0) {
@@ -288,7 +290,16 @@ app.post("/customer", async function (req, res) {
           if (item.data && item.data.length > 0) {
             r.sub = true;
             item.data.map((i) => {
-              sub.push({ priceId: i.price.id, productId: i.price.product });
+              let type = null;
+              if (i.price.id == process.env.FOREX) {
+                type = "FOREX";
+              } else if (i.price.id == process.env.CRYPTO) {
+                type = "CRYPTO";
+              } else if (i.price.id == process.env.INDICES) {
+                type = "INDICES";
+              }
+              sub.push(type);
+              r.type = type;
             });
           }
         });

@@ -205,6 +205,9 @@ function createPaymentMethod({ card, isPaymentRetry, invoiceId }) {
 function goToPaymentPage(priceId) {
   // Show the payment screen
   document.querySelector("#payment-form").classList.remove("hidden");
+  document
+    .getElementById("payment-form")
+    .scrollIntoView({ behavior: "smooth" });
 
   document.getElementById("total-due-now").innerText = getFormattedAmount(
     priceInfo[priceId].amount

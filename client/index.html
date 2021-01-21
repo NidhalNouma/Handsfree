@@ -69,14 +69,14 @@
   <script>
    let vid = document.getElementById('vidAu')
    vid.play()
-   var pausing_function = function(){
-    if(this.currentTime >= 7) {
-        this.pause();
+  //  var pausing_function = function(){
+  //   if(this.currentTime >= 7) {
+  //       this.pause();
 
-        this.removeEventListener("timeupdate",pausing_function);
-      }
-    };  
+  //       this.removeEventListener("timeupdate",pausing_function);
+  //     }
+  //   };  
 
-   vid.addEventListener("timeupdate",pausing_function)
+  //  vid.addEventListener("timeupdate",pausing_function)
 </script>
 </html>
