@@ -823,8 +823,8 @@ function changeLoadingStateprices(isLoading) {
     document.querySelector("#button-text").classList.add("hidden");
     document.querySelector("#loading").classList.remove("hidden");
 
-    document.querySelector("#submit-basic").classList.add("invisible");
-    document.querySelector("#submit-premium").classList.add("invisible");
+    document.getElementById("submit-Forex").classList.add("invisible");
+    document.getElementById("submit-Crypto").classList.add("invisible");
     if (document.getElementById("confirm-price-change-cancel")) {
       document
         .getElementById("confirm-price-change-cancel")
@@ -834,8 +834,8 @@ function changeLoadingStateprices(isLoading) {
     document.querySelector("#button-text").classList.remove("hidden");
     document.querySelector("#loading").classList.add("hidden");
 
-    document.querySelector("#submit-basic").classList.remove("invisible");
-    document.querySelector("#submit-premium").classList.remove("invisible");
+    document.querySelector("#submit-Forex").classList.remove("invisible");
+    document.querySelector("#submit-Crypto").classList.remove("invisible");
     if (document.getElementById("confirm-price-change-cancel")) {
       document
         .getElementById("confirm-price-change-cancel")
