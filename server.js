@@ -4,6 +4,8 @@ const { resolve } = require("path");
 const bodyParser = require("body-parser");
 require("dotenv").config({ path: "./.env" });
 
+const { findUser, addUser, addIP, removeIP } = require("./DynamoDb");
+
 if (
   !process.env.STRIPE_SECRET_KEY ||
   !process.env.STRIPE_PUBLISHABLE_KEY ||
@@ -274,23 +276,50 @@ app.post(
 );
 
 app.post("/customer", async function (req, res) {
-  const r = { found: false, type: null, sub: false, result: null };
+  const r = { found: false, type: null, sub: false, Accounts: 0, result: null };
   if (!req.body.email && !req.body.id) {
     res.json(r);
     return;
   }
+
+  let email = req.body.email;
   let customers = req.body.id;
   if (!customers) {
     customers = await stripe.customers.list({
-      email: req.body.email,
+      email: email,
     });
+    if (customers.data.length === 0) return res.json({ err: "invalid Email" });
     customers = customers.data[0].id;
   }
+  if (!email) {
+    const customer = await stripe.customers.retrieve(customers);
+    if (!customer.email) return res.json({ err: "invalid Email" });
+    email = customer.email;
+  }
+
   const subscriptions = await stripe.subscriptions.list({
     customer: customers,
   });
 
-  // return res.json(customers);
+  try {
+    const au = await findUser(customers);
+    if (!au.Item) {
+      await addUser(customers, email);
+      r.Accounts = 0;
+    } else {
+      r.Accounts = au.Item.Accounts.length;
+    }
+
+    if (req.body.ip && req.body.server) {
+      const ap = await addIP(customers, email, {
+        ANo: req.body.ip,
+        server: req.body.server,
+      });
+      console.log(ap);
+    }
+  } catch (e) {
+    console.log("DY_DB_CUS_ERROR => ", e);
+  }
 
   const { data } = subscriptions;
 
