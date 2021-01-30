@@ -4,7 +4,7 @@ const { resolve } = require("path");
 const bodyParser = require("body-parser");
 require("dotenv").config({ path: "./.env" });
 
-const { findUser, addUser, addIP, removeIP } = require("./DynamoDb");
+const { findUser, addUser, addIP, removeIP, findIP } = require("./DynamoDb");
 
 if (
   !process.env.STRIPE_SECRET_KEY ||
@@ -66,8 +66,29 @@ app.use((req, res, next) => {
 });
 
 app.get("/", (req, res) => {
-  const path = resolve(process.env.STATIC_DIR + "/index.html");
+  const path = resolve(process.env.HTML_DIR + "/index.html");
   res.sendFile(path);
+});
+
+app.get("/account", (req, res) => {
+  const path = resolve(process.env.HTML_DIR + "/account.html");
+  res.sendFile(path);
+});
+
+app.get("/prices", async (req, res) => {
+  const id = req.query.customerId;
+  if (id) {
+    try {
+      const customer = await stripe.customers.retrieve(id);
+
+      const path = resolve(process.env.HTML_DIR + "/prices.html");
+      res.sendFile(path);
+    } catch (err) {
+      res.redirect("/");
+    }
+  } else {
+    res.redirect("/");
+  }
 });
 
 app.get("/config", async (req, res) => {
@@ -276,7 +297,14 @@ app.post(
 );
 
 app.post("/customer", async function (req, res) {
-  const r = { found: false, type: null, sub: false, Accounts: 0, result: null };
+  const r = {
+    found: false,
+    type: null,
+    sub: false,
+    Accounts: 0,
+    result: null,
+    email: "",
+  };
   if (!req.body.email && !req.body.id) {
     res.json(r);
     return;
@@ -297,12 +325,13 @@ app.post("/customer", async function (req, res) {
     email = customer.email;
   }
 
+  r.email = email;
   const subscriptions = await stripe.subscriptions.list({
     customer: customers,
   });
 
   try {
-    const au = await findUser(customers);
+    const au = await findUser(email);
     if (!au.Item) {
       await addUser(customers, email);
       r.Accounts = 0;
@@ -311,7 +340,7 @@ app.post("/customer", async function (req, res) {
     }
 
     if (req.body.ip && req.body.server) {
-      const ap = await addIP(customers, email, {
+      const ap = await addIP(email, {
         ANo: req.body.ip,
         server: req.body.server,
       });
@@ -361,6 +390,43 @@ app.post("/check-coupon", async function (req, res) {
     r.err = e;
   }
   res.json(r);
+});
+
+app.post("/check-ip", async function (req, res) {
+  let r = { valid: false, accounts: {} };
+  const { ip, email } = req.body;
+  if (!ip || !email) return res.json(r);
+
+  const r1 = await findIP(email);
+  if (!r1.Item) return res.json(r);
+
+  const { Accounts } = r1.Item;
+  r.accounts = Accounts;
+
+  Accounts.map((i) => {
+    if (i.ANo === ip) r.valid = true;
+  });
+  res.json(r);
+});
+
+app.post("/get-ip", async function (req, res) {
+  let r = {};
+  const { email } = req.body;
+  if (!email) return res.json(r);
+
+  const r1 = await findUser(email);
+  res.json(r1);
+});
+
+app.post("/remove-ip", async function (req, res) {
+  let r = {};
+  const { ind, email } = req.body;
+  console.log(ind, email);
+  if (!email || ind === undefined) return res.json(r);
+
+  console.log(ind, email);
+  const r1 = await removeIP(email, ind);
+  res.json(r1);
 });
 
 const port = process.env.PORT || 8080;

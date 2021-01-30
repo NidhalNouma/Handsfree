@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="A demo of Stripe Billing" />
 
-    <link rel="icon" href="./images/favicon.ico" type="image/x-icon"/>
+    <link rel="icon" href="./favicon.ico" type="image/x-icon"/>
     <link rel="stylesheet" href="css/normalize.css" />
     <link rel="stylesheet" href="css/global.css" />
     <script src="https://js.stripe.com/v3/"></script>
@@ -227,6 +227,17 @@
             </div>
           </div>
         </div>
+
+        <div id="accounts" class="flex justify-center hidden">
+          <div>
+          <div class="text-gray-500 text-xl mb-2 font-medium">
+            Your Accounts
+          </div>
+          <ul id="accounts-ul">
+          </ul>
+        </div>
+        </div>
+
         <div id="payment-form" class="flex justify-center hidden">
           <div class="w-full inline-block border p-4 rounded-md">
             <div class="font-bold text-xl mb-2">
@@ -323,6 +334,64 @@
   <footer class="h-24"></footer>
 
 <script>
+
+  function remIp(email,ind){ 
+    const li= document.getElementById("accounts-li-"+ind).remove()
+    // console.log(ind);
+    fetch("/remove-ip", {
+      method: "post",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({
+        email,ind
+      }),
+    })
+  }
+
+  function getAc(email) {
+    if(!email) return
+
+    
+  fetch("/get-ip", {
+    method: "post",
+    headers: {
+      "Content-type": "application/json",
+    },
+    body: JSON.stringify({
+      email,
+    }),
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .then((response) => {
+      if(response.Item){
+        const {Accounts} = response.Item
+        if(!Accounts) return;
+        if(Accounts.length ===0) return;
+        document.getElementById("accounts").classList.remove('hidden')
+        
+        Accounts.map(function(i,ind){
+          const ul = document.getElementById("accounts-ul")
+          const li=document.createElement("li");
+          function fn(){
+            remIp(email,ind)
+          }
+          li.id="accounts-li-"+ind
+          const btn = document.createElement("button")
+          btn.className="bg-pasha hover:bg-white hover:shadow-outline hover:text-pasha hover:border hover:border-black focus:shadow-outline text-white focus:bg-white focus:text-pasha font-light py-1 px-2 rounded-md"
+          btn.onclick=fn
+          btn.innerHTML="X"
+          li.innerHTML = `Account Number: <span>${i.ANo}</span> Server: <span>${i.server}</span>`
+          li.appendChild(btn)
+          ul.appendChild(li)
+        })
+      }
+    })
+
+  }
+
   const params = new URLSearchParams(document.location.search.substring(1));
   const customerId = params.get("customerId");
   fetch("/customer", {
@@ -374,6 +443,7 @@
           }
         })
       }
+              getAc(response.email)
     });
 </script>
 

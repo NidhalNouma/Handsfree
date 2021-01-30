@@ -18,8 +18,8 @@ function addUser(_id, email) {
   var params = {
     TableName: table,
     Item: {
-      _id,
       email,
+      _id,
       Accounts: [],
       Results: [],
     },
@@ -45,11 +45,11 @@ function addUser(_id, email) {
   return promise;
 }
 
-function findUser(_id) {
+function findUser(email) {
   var params = {
     TableName: table,
     Key: {
-      _id,
+      email,
     },
   };
 
@@ -72,11 +72,11 @@ function findUser(_id) {
   return promise;
 }
 
-function addIP(_id, email, ip) {
+function addIP(email, ip) {
   var params = {
     TableName: table,
     Key: {
-      _id,
+      email,
     },
 
     UpdateExpression:
@@ -117,11 +117,11 @@ function addIP(_id, email, ip) {
   return promise;
 }
 
-function removeIP(_id, email, i) {
+function removeIP(email, i) {
   var params = {
     TableName: table,
     Key: {
-      _id,
+      email,
     },
 
     UpdateExpression: "REMOVE #n[" + i + "]",
@@ -154,9 +154,37 @@ function removeIP(_id, email, i) {
   return promise;
 }
 
+function findIP(email) {
+  var params = {
+    TableName: table,
+    Key: {
+      email,
+    },
+  };
+
+  console.log("Finding Account N° ... ", email);
+  const promise = new Promise((resolve, reject) => {
+    docClient.get(params, function (err, data) {
+      if (err) {
+        console.error(
+          "Unable to read item. Error JSON:",
+          JSON.stringify(err, null, 2)
+        );
+        reject(err);
+      } else {
+        console.log("Account N° Found ... ", email);
+        resolve(data);
+      }
+    });
+  });
+
+  return promise;
+}
+
 module.exports = {
   findUser,
   addUser,
   addIP,
   removeIP,
+  findIP,
 };

@@ -69,7 +69,7 @@ function stripeElements(publishableKey) {
       createCustomer().then((result) => {
         customer = result.customer;
 
-        window.location.href = "/prices.html?customerId=" + customer.id;
+        window.location.href = "/prices?customerId=" + customer.id;
       });
     });
   }
@@ -752,7 +752,7 @@ function onSubscriptionSampleDemoComplete({
   }
 
   window.location.href =
-    "/account.html?subscriptionId=" +
+    "/account?subscriptionId=" +
     subscriptionId +
     "&priceId=" +
     priceId +
