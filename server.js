@@ -4,7 +4,14 @@ const { resolve } = require("path");
 const bodyParser = require("body-parser");
 require("dotenv").config({ path: "./.env" });
 
-const { findUser, addUser, addIP, removeIP, findIP } = require("./DynamoDb");
+const {
+  findUser,
+  addUser,
+  addIP,
+  removeIP,
+  findIP,
+  addResult,
+} = require("./DynamoDb");
 
 if (
   !process.env.STRIPE_SECRET_KEY ||
@@ -12,6 +19,7 @@ if (
   !process.env.FOREX ||
   !process.env.CRYPTO ||
   !process.env.INDICES ||
+  !process.env.STOCK ||
   !process.env.STATIC_DIR
 ) {
   console.log(
@@ -30,6 +38,12 @@ if (
     ? ""
     : console.log(
         "Add Forex priceID to your .env file. See repo readme for setup instructions."
+      );
+
+  process.env.STOCK
+    ? ""
+    : console.log(
+        "Add Stock priceID to your .env file. See repo readme for setup instructions."
       );
 
   process.env.INDICES
@@ -367,6 +381,9 @@ app.post("/customer", async function (req, res) {
         } else if (i.plan.id == process.env.INDICES) {
           type = "INDICES";
           if (type === req.body.type) r.sub = true;
+        } else if (i.plan.id == process.env.STOCK) {
+          type = "STOCK";
+          if (type === req.body.type) r.sub = true;
         }
         sub.push(type);
         r.type = type;
@@ -421,11 +438,18 @@ app.post("/get-ip", async function (req, res) {
 app.post("/remove-ip", async function (req, res) {
   let r = {};
   const { ind, email } = req.body;
-  console.log(ind, email);
-  if (!email || ind === undefined) return res.json(r);
 
-  console.log(ind, email);
+  if (!email || ind === undefined) return res.json(r);
   const r1 = await removeIP(email, ind);
+  res.json(r1);
+});
+
+app.post("/result", async function (req, res) {
+  const { email, account, result } = req.body;
+
+  if (!email || !account) return res.json(r);
+
+  const r1 = await addResult(email, account, result);
   res.json(r1);
 });
 

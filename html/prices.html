@@ -19,8 +19,9 @@
         src="https://www.dominateforex.info/wp-content/uploads/2020/04/cropped-C13AD53B-1FA1-4810-9042-A18E80BA7F94.jpeg"
       />
       <div>
+        <a href="/EA_instructions.pdf" target="_blank" class="mr-4 py-2 px-4 rounded font-bold text-pasha hover:border hover:border-black hover:shadow-outline">How to use</a>
         <button
-          class="bg-white hover:bg-white hover:shadow-outline hover:text-pasha hover:border hover:border-black focus:shadow-outline text-pasha focus:bg-white focus:text-pasha font-light py-2 px-4 rounded"
+          class="bg-white hover:shadow-outline  hover:border hover:border-black focus:shadow-outline text-pasha focus:bg-white focus:text-pasha font-light py-2 px-4 rounded"
           type="button"
           onclick="resetDemo()"
         >
@@ -34,10 +35,10 @@
           Subscribe to a plan
         </div>
 
-        <div class="flex justify-between mb-8">
+        <div class="flex justify-between mb-8 mbloc">
           <div
             id="basic"
-            class="w-2/2 rounded overflow-hidden border rounded-md p-2 mr-4 md:mr-8"
+            class="w-2/2 rounded overflow-hidden border rounded-md p-2 mr-4 md:mr-8 mb-3"
           >
             <div class="px-2 py-2">
               <div class="text-gray-500 text-xl mb-2 font-medium">
@@ -100,9 +101,61 @@
               </div>
             </div>
           </div>
+
+          <div
+          id="premium"
+          class="w-2/2 rounded overflow-hidden border rounded-md p-2 mr-4 md:mr-8  mb-3"
+        >
+          <div class="px-2 py-2">
+            <div class="text-gray-500 text-xl mb-2 font-medium">
+              HandsFree Stock Robot(EA)
+            </div>
+            <p class="text-pasha text-2xl font-extrabold">
+              $135
+            </p>
+            <div class="flex-wrap">
+              <div class="leading-none text-gray-500 text-xs font-medium">
+                <img src="images/stock.png" width="250" height="180" />
+              </div> 
+              <div
+                class="leading-none text-gray-500 text-xs font-medium mt-4"
+              >
+                Billed monthly
+              </div>
+            </div>
+            <div class="flex justify-center mt-6">
+              <button
+                id="submit-Stock"
+                onClick="goToPaymentPage('Stock')"
+                class="bg-pasha hover:bg-white outline-none hover:text-pasha hover:border hover:border-black text-white focus:bg-white focus:text-pasha font-light py-2 px-4 rounded-lg"
+                type="submit"
+              >
+                <div
+                  id="submit-premium-button-text2"
+                  class="w-auto -mx-2 md:mx-0"
+                >
+                  Select
+                </div>
+              </button>
+              <button
+                id="Download-Stock"
+                class="hidden bg-pasha hover:bg-white outline-none hover:text-pasha hover:border hover:border-black text-white focus:bg-white focus:text-pasha font-light py-2 px-4 rounded-lg"
+                type="submit"
+              >
+                <div
+                  id="Crypto"
+                  class="w-auto -mx-2 md:mx-0"
+                >
+                  Download
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+
           <div
             id="premium"
-            class="w-2/2 rounded overflow-hidden border rounded-md p-2 mr-4 md:mr-8"
+            class="w-2/2 rounded overflow-hidden border rounded-md p-2 mr-4 md:mr-8 mb-3"
           >
             <div class="px-2 py-2">
               <div class="text-gray-500 text-xl mb-2 font-medium">
@@ -165,7 +218,7 @@
           </div>
           <div
             id="premium"
-            class="w-2/2 rounded overflow-hidden border rounded-md p-2"
+            class="w-2/2 rounded overflow-hidden border rounded-md p-2  mb-3"
           >
             <div class="px-2 py-2">
               <div class="text-gray-500 text-xl mb-2 font-medium">
@@ -434,6 +487,15 @@
                 const btn = document.getElementById("Download-Indices")
                 btn.classList.remove("hidden")
                 const dnl = "Robot/Indices HandsFree Robot.ex4";
+                btn.addEventListener("click", function (e) {
+                    window.location = dnl;
+                  });
+              }
+              if(it==="STOCK") {
+                document.getElementById("submit-Stock").classList.add("hidden")
+                const btn = document.getElementById("Download-Stock")
+                btn.classList.remove("hidden")
+                const dnl = "Robot/Stock HandsFree Robot.ex4";
                 btn.addEventListener("click", function (e) {
                     window.location = dnl;
                   });

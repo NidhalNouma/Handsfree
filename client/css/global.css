@@ -49,6 +49,11 @@ html {
 /**
  * Remove the margin in all browsers.
  */
+@media (max-width: 700px) {
+  .mbloc {
+    display: block !important;
+  }
+}
 
 body {
   margin: 0;

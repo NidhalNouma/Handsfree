@@ -181,7 +181,7 @@ function findIP(email) {
   return promise;
 }
 
-function addingResult(email, account, result) {
+function addResult(email, account, result) {
   var params = {
     TableName: table,
     Key: {
@@ -225,4 +225,5 @@ module.exports = {
   addIP,
   removeIP,
   findIP,
+  addResult,
 };

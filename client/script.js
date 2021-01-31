@@ -7,6 +7,12 @@ let priceInfo = {
     interval: "monthly",
     currency: "USD",
   },
+  Stock: {
+    amount: "13500",
+    name: "Stock",
+    interval: "monthly",
+    currency: "USD",
+  },
   Crypto: {
     amount: "15000",
     name: "Crypto",
@@ -225,15 +231,24 @@ function goToPaymentPage(priceId) {
     document.querySelector("#submit-premium-button-text").innerText = "Select";
     document.querySelector("#submit-basic-button-text").innerText = "Selected";
     document.querySelector("#submit-premium-button-text1").innerText = "Select";
+    document.querySelector("#submit-premium-button-text2").innerText = "Select";
   } else if (priceId === "Crypto") {
     document.querySelector("#submit-premium-button-text").innerText =
       "Selected";
     document.querySelector("#submit-basic-button-text").innerText = "Select";
     document.querySelector("#submit-premium-button-text1").innerText = "Select";
+    document.querySelector("#submit-premium-button-text2").innerText = "Select";
   } else if (priceId === "Indices") {
     document.querySelector("#submit-premium-button-text").innerText = "Select";
     document.querySelector("#submit-basic-button-text").innerText = "Select";
     document.querySelector("#submit-premium-button-text1").innerText =
+      "Selected";
+    document.querySelector("#submit-premium-button-text2").innerText = "Select";
+  } else if (priceId === "Stock") {
+    document.querySelector("#submit-premium-button-text").innerText = "Select";
+    document.querySelector("#submit-basic-button-text").innerText = "Select";
+    document.querySelector("#submit-premium-button-text1").innerText = "Select";
+    document.querySelector("#submit-premium-button-text2").innerText =
       "Selected";
   }
 
