@@ -13,6 +13,7 @@ aws.config.update(config);
 var docClient = new aws.DynamoDB.DocumentClient();
 
 var table = process.env.DYNAMO_DB_TABEL_NAME;
+var table_msg = process.env.DYNAMO_DB_TABEL_Msg;
 
 function addUser(_id, email) {
   var params = {
@@ -219,6 +220,33 @@ function addResult(email, account, result) {
   return promise;
 }
 
+function findMsg(version = 1) {
+  var params = {
+    TableName: table_msg,
+    Key: {
+      version,
+    },
+  };
+
+  console.log("Finding Message ... ");
+  const promise = new Promise((resolve, reject) => {
+    docClient.get(params, function (err, data) {
+      if (err) {
+        console.error(
+          "Unable to read item. Error JSON:",
+          JSON.stringify(err, null, 2)
+        );
+        reject(err);
+      } else {
+        console.log("Message Found ... ");
+        resolve(data);
+      }
+    });
+  });
+
+  return promise;
+}
+
 module.exports = {
   findUser,
   addUser,
@@ -226,4 +254,5 @@ module.exports = {
   removeIP,
   findIP,
   addResult,
+  findMsg,
 };

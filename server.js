@@ -11,6 +11,7 @@ const {
   removeIP,
   findIP,
   addResult,
+  findMsg,
 } = require("./DynamoDb");
 
 if (
@@ -458,7 +459,13 @@ app.post("/result", async function (req, res) {
 
 app.post("/message", async function (req, res) {
   let r = "";
-  if (process.env.VERSION > req.body.version) r = process.env.MESSAGE;
+  try {
+    const { Item } = await findMsg();
+    if (Item.ver > req.body.version) r = Item.message;
+  } catch (err) {
+    console.log("message: error ==> ", err);
+  }
+
   res.json(r);
 });
 
