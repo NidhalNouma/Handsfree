@@ -447,6 +447,10 @@ app.post("/remove-ip", async function (req, res) {
 app.post("/result", async function (req, res) {
   const { email, account, data } = req.body;
 
+  console.log(email);
+  console.log(account);
+  console.log(data);
+
   if (!email || !account) return res.json(r);
 
   const r1 = await addResult(email, account, data);
