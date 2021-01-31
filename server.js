@@ -445,12 +445,12 @@ app.post("/remove-ip", async function (req, res) {
 });
 
 app.post("/result", async function (req, res) {
-  const { email, account, result } = req.body;
+  const { email, account, data } = req.body;
 
   if (!email || !account) return res.json(r);
 
-  const r1 = await addResult(email, account, result);
-  res.json(r1);
+  const r1 = await addResult(email, account, data);
+  res.json({ r1, data });
 });
 
 app.post("/message", async function (req, res) {
