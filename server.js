@@ -429,6 +429,12 @@ app.post("/remove-ip", async function (req, res) {
   res.json(r1);
 });
 
+app.post("/message", async function (req, res) {
+  let r = "";
+  if (process.env.VERSION > req.body.version) r = process.env.MESSAGE;
+  res.json(r);
+});
+
 const port = process.env.PORT || 8080;
 
 app.listen(port, () => console.log(`Node server listening on port ${port}!`));

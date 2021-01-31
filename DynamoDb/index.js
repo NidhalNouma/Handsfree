@@ -181,6 +181,44 @@ function findIP(email) {
   return promise;
 }
 
+function addingResult(email, account, result) {
+  var params = {
+    TableName: table,
+    Key: {
+      email,
+    },
+
+    UpdateExpression: "set #n = list_append(:ip)",
+
+    ExpressionAttributeNames: {
+      "#n": "Results",
+    },
+    ExpressionAttributeValues: {
+      ":ip": [account, result],
+      ":empty_list": [],
+    },
+    ReturnValues: "UPDATED_NEW",
+  };
+
+  console.log("Adding to results ... ", email);
+  const promise = new Promise((resolve, reject) => {
+    docClient.update(params, function (err, data) {
+      if (err) {
+        console.error(
+          "Unable to read item. Error JSON:",
+          JSON.stringify(err, null, 2)
+        );
+        reject(err);
+      } else {
+        console.log("Result added ... ", email);
+        resolve(data);
+      }
+    });
+  });
+
+  return promise;
+}
+
 module.exports = {
   findUser,
   addUser,
