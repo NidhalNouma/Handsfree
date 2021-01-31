@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>DominateForex HandsFree Robot (EA)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="A demo of Stripe Billing" />
+
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon"/>
+    <link rel="stylesheet" href="css/normalize.css" />
+    <link rel="stylesheet" href="css/global.css" />
+    <script src="https://js.stripe.com/v3/"></script>
+    <script src="/script.js" defer></script>
+  </head>
+
+  <body class="antialiased p-6">
+    <nav class="flex items-center justify-between flex-wrap">
+      <image width="80px" height="50px"
+        src="https://www.dominateforex.info/wp-content/uploads/2020/04/cropped-C13AD53B-1FA1-4810-9042-A18E80BA7F94.jpeg"
+      />
+      <div>
+        <a href="https://dominateforexhandsfree.s3.us-east-2.amazonaws.com/videohu.mp4" target="_blank" class="mr-4 py-2 px-4 rounded font-bold text-pasha hover:border hover:border-black hover:shadow-outline">Install Robot Video</a>
+        <a href="/EA_instructions.pdf" target="_blank" class="mr-4 py-2 px-4 rounded font-bold text-pasha hover:border hover:border-black hover:shadow-outline">How to use</a>
+        <button
+          class="bg-white hover:shadow-outline  hover:border hover:border-black focus:shadow-outline text-pasha focus:bg-white focus:text-pasha font-light py-2 px-4 rounded"
+          type="button"
+          onclick="resetDemo()"
+        >
+          Sign out
+        </button>
+      </div>
+    </nav>
+    <div id="prices-and-payment" style="margin-top: 1.3rem;" class="flex flex-wrap justify-center">
+      <div id="prices-form" class="md:w-2/4 w-2/5 mr-4 md:mb-8">
+        <div class="text-center text-pasha font-bold text-2xl mt-4 mb-6">
+          Subscribe to a plan
+        </div>
+
+        <div class="flex justify-between mb-8 mbloc">
+          <div
+            id="basic"
+            class="w-2/2 rounded overflow-hidden border rounded-md p-2 mr-4 md:mr-8 mb-3"
+          >
+            <div class="px-2 py-2">
+              <div class="text-gray-500 text-xl mb-2 font-medium">
+                HandsFree Forex Robot(EA)
+              </div>
+              <p class="text-pasha text-2xl font-extrabold">
+                $100
+              </p>
+              <div class="flex-wrap">
+                <!-- <div class="leading-none text-gray-500 text-xs font-medium">
+                  Per month flat fee for up to 2,000 emails
+                </div>
+                <div
+                  class="leading-none text-gray-500 text-xs mt-4 font-medium mt-1"
+                >
+                  <p class="text-pasha text-2xl mb-2">
+                   +  $.001
+                  </p>
+                </div>
+                <div class="leading-none text-gray-500 text-xs font-medium">
+                  Per excess email above 2,000
+                </div> -->
+                <div class="leading-none text-gray-500 text-xs font-medium">
+                  <img src="images/forex.png" width="250" height="180" />
+                </div> 
+
+                <div
+                  class="leading-none text-gray-500 text-xs font-medium mt-4"
+                >
+                  Billed monthly
+                </div>
+              </div>
+
+              <div class="flex justify-center mt-6">
+                <button
+                  id="submit-Forex"
+                  onClick="goToPaymentPage('Forex')"
+                  class="bg-pasha hover:bg-white outline-none hover:text-pasha hover:border hover:border-black text-white focus:bg-white focus:text-pasha font-light py-2 px-4 rounded-lg"
+                  type="submit"
+                >
+                  <div
+                    id="submit-basic-button-text"
+                    class="w-auto -mx-2 md:mx-0"
+                  >
+                    Select
+                  </div>
+                </button>
+                <button
+                  id="Download-Forex"
+                  class="hidden bg-pasha hover:bg-white outline-none hover:text-pasha hover:border hover:border-black text-white focus:bg-white focus:text-pasha font-light py-2 px-4 rounded-lg"
+                  type="submit"
+                >
+                  <div
+                    id="Forex"
+                    class="w-auto -mx-2 md:mx-0"
+                  >
+                    Download
+                  </div>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div
+          id="premium"
+          class="w-2/2 rounded overflow-hidden border rounded-md p-2 mr-4 md:mr-8  mb-3"
+        >
+          <div class="px-2 py-2">
+            <div class="text-gray-500 text-xl mb-2 font-medium">
+              HandsFree Stock Robot(EA)
+            </div>
+            <p class="text-pasha text-2xl font-extrabold">
+              $135
+            </p>
+            <div class="flex-wrap">
+              <div class="leading-none text-gray-500 text-xs font-medium">
+                <img src="images/stock.png" width="250" height="180" />
+              </div> 
+              <div
+                class="leading-none text-gray-500 text-xs font-medium mt-4"
+              >
+                Billed monthly
+              </div>
+            </div>
+            <div class="flex justify-center mt-6">
+              <button
+                id="submit-Stock"
+                onClick="goToPaymentPage('Stock')"
+                class="bg-pasha hover:bg-white outline-none hover:text-pasha hover:border hover:border-black text-white focus:bg-white focus:text-pasha font-light py-2 px-4 rounded-lg"
+                type="submit"
+              >
+                <div
+                  id="submit-premium-button-text2"
+                  class="w-auto -mx-2 md:mx-0"
+                >
+                  Select
+                </div>
+              </button>
+              <button
+                id="Download-Stock"
+                class="hidden bg-pasha hover:bg-white outline-none hover:text-pasha hover:border hover:border-black text-white focus:bg-white focus:text-pasha font-light py-2 px-4 rounded-lg"
+                type="submit"
+              >
+                <div
+                  id="Crypto"
+                  class="w-auto -mx-2 md:mx-0"
+                >
+                  Download
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+
+          <div
+            id="premium"
+            class="w-2/2 rounded overflow-hidden border rounded-md p-2 mr-4 md:mr-8 mb-3"
+          >
+            <div class="px-2 py-2">
+              <div class="text-gray-500 text-xl mb-2 font-medium">
+                HandsFree Crypto Robot(EA)
+              </div>
+              <p class="text-pasha text-2xl font-extrabold">
+                $150
+              </p>
+              <div class="flex-wrap">
+                <!-- <div class="leading-none text-gray-500 text-xs font-medium">
+                  Per month flat fee for up to 10,000 emails
+                </div>
+                <div
+                  class="leading-none text-gray-500 text-xs mt-4 font-medium mt-1"
+                >
+                  <p class="text-pasha text-2xl mb-2">
+                    + $.00075
+                  </p>
+                </div>
+                <div class="leading-none text-gray-500 text-xs font-medium">
+                  Per excess email above 10,000
+                </div> -->
+                <div class="leading-none text-gray-500 text-xs font-medium">
+                  <img src="images/crypto.png" width="250" height="180" />
+                </div> 
+                <div
+                  class="leading-none text-gray-500 text-xs font-medium mt-4"
+                >
+                  Billed monthly
+                </div>
+              </div>
+              <div class="flex justify-center mt-6">
+                <button
+                  id="submit-Crypto"
+                  onClick="goToPaymentPage('Crypto')"
+                  class="bg-pasha hover:bg-white outline-none hover:text-pasha hover:border hover:border-black text-white focus:bg-white focus:text-pasha font-light py-2 px-4 rounded-lg"
+                  type="submit"
+                >
+                  <div
+                    id="submit-premium-button-text"
+                    class="w-auto -mx-2 md:mx-0"
+                  >
+                    Select
+                  </div>
+                </button>
+                <button
+                  id="Download-Crypto"
+                  class="hidden bg-pasha hover:bg-white outline-none hover:text-pasha hover:border hover:border-black text-white focus:bg-white focus:text-pasha font-light py-2 px-4 rounded-lg"
+                  type="submit"
+                >
+                  <div
+                    id="Crypto"
+                    class="w-auto -mx-2 md:mx-0"
+                  >
+                    Download
+                  </div>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div
+            id="premium"
+            class="w-2/2 rounded overflow-hidden border rounded-md p-2  mb-3"
+          >
+            <div class="px-2 py-2">
+              <div class="text-gray-500 text-xl mb-2 font-medium">
+                HandsFree Indices Robot(EA)
+              </div>
+              <p class="text-pasha text-2xl font-extrabold">
+                $200
+              </p>
+              <div class="flex-wrap">
+                <!-- <div class="leading-none text-gray-500 text-xs font-medium">
+                  Per month flat fee for up to 10,000 emails
+                </div>
+                <div
+                  class="leading-none text-gray-500 text-xs mt-4 font-medium mt-1"
+                >
+                  <p class="text-pasha text-2xl mb-2">
+                    + $.00075
+                  </p>
+                </div>
+                <div class="leading-none text-gray-500 text-xs font-medium">
+                  Per excess email above 10,000
+                </div> -->
+                <div class="leading-none text-gray-500 text-xs font-medium">
+                  <img src="images/indices.png" width="250" height="180" />
+                </div> 
+                <div
+                  class="leading-none text-gray-500 text-xs font-medium mt-4"
+                >
+                  Billed monthly
+                </div>
+              </div>
+              <div class="flex justify-center mt-6">
+                <button
+                  id="submit-Indices"
+                  onClick="goToPaymentPage('Indices')"
+                  class="bg-pasha hover:bg-white outline-none hover:text-pasha hover:border hover:border-black text-white focus:bg-white focus:text-pasha font-light py-2 px-4 rounded-lg"
+                  type="submit"
+                >
+                  <div
+                    id="submit-premium-button-text1"
+                    class="w-auto -mx-2 md:mx-0"
+                  >
+                    Select
+                  </div>
+                </button>
+                <button
+                  id="Download-Indices"
+                  class="hidden bg-pasha hover:bg-white outline-none hover:text-pasha hover:border hover:border-black text-white focus:bg-white focus:text-pasha font-light py-2 px-4 rounded-lg"
+                  type="submit"
+                >
+                  <div
+                    id="Indices"
+                    class="w-auto -mx-2 md:mx-0"
+                  >
+                    Download
+                  </div>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="accounts" class="flex justify-center hidden">
+          <div>
+          <div class="text-gray-500 text-xl mb-2 font-medium">
+            Your Accounts
+          </div>
+          <ul id="accounts-ul">
+          </ul>
+        </div>
+        </div>
+
+        <div id="payment-form" class="flex justify-center hidden">
+          <div class="w-full inline-block border p-4 rounded-md">
+            <div class="font-bold text-xl mb-2">
+              Enter your card details. </br>Your subscription will start now.
+            </div>
+            <p class="text-gray-700 text-base">
+              → Total due now <span id="total-due-now">$0.00</span><span class="spanCou" id="discountCOU"></span>
+            </p>
+            <p id="price-selected" class="text-gray-700 text-base mb-4"></p>
+
+            <div class="w-full">
+              <div class="flex flex-wrap -mx-3 mb-2">
+                <div class=" px-3 md:mb-0">
+                  <label
+                    class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                    for="grid-first-name"
+                  >
+                    Coupon
+                  </label>
+                  <input
+                    class="appearance-none block bg-gray-200 border rounded-md py-3 px-2 mb-3 leading-tight focus:outline-none focus:bg-white"
+                    id="coupon"
+                    type="text"
+                    placeholder="Coupon code"
+                    required
+                  />
+                  <button
+                    id="coupon-btn"
+                    class="bg-pasha hover:bg-white hover:shadow-outline hover:text-pasha hover:border hover:border-black focus:shadow-outline text-white focus:bg-white focus:text-pasha font-light py-2 px-4 rounded-md"
+                    type="submit"
+                  >
+                    <div class="">
+                      <div id="checking-cou" class="hidden">Checking...</div>
+                      <span id="check-cou" class="">Check coupon</span>
+                    </div>
+                  </button>
+                </div>
+              </div>
+              <div class="flex flex-wrap -mx-3 mb-2">
+                <div class="w-full px-3 md:mb-0">
+                  <label
+                    class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                    for="grid-first-name"
+                  >
+                    Full name
+                  </label>
+                  <input
+                    class="appearance-none block w-full bg-gray-200 border rounded-md py-3 px-2 mb-3 leading-tight focus:outline-none focus:bg-white"
+                    id="name"
+                    type="text"
+                    placeholder="First and last name"
+                    required
+                  />
+                </div>
+              </div>
+              <form id="payment-form">
+                <div class="flex flex-wrap -mx-3 mb-3">
+                  <div class="w-full px-3 mb-0">
+                    <label
+                      class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                      for="grid-first-name"
+                    >
+                      Card
+                    </label>
+                    <div
+                      class="appearance-none block w-full bg-gray-200 text-gray-700 border rounded-md py-3 px-2 leading-tight focus:outline-none focus:bg-white"
+                      id="card-element"
+                    ></div>
+                    <div
+                      id="card-element-errors"
+                      class="text-gray-700 text-base mt-2"
+                      role="alert"
+                    ></div>
+                  </div>
+                </div>
+                <button
+                  id="submit-premium"
+                  class="w-full bg-pasha hover:bg-white hover:shadow-outline hover:text-pasha hover:border hover:border-black focus:shadow-outline text-white focus:bg-white focus:text-pasha font-light py-2 px-4 rounded-md"
+                  type="submit"
+                >
+                  <div class="">
+                    <div id="loading" class="hidden">Subscribing...</div>
+                    <span id="button-text" class="">Subscribe</span>
+                  </div>
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </body>
+  <footer class="h-24"></footer>
+
+<script>
+
+  function remIp(email,ind){ 
+    const li= document.getElementById("accounts-li-"+ind).remove()
+    // console.log(ind);
+    fetch("/remove-ip", {
+      method: "post",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({
+        email,ind
+      }),
+    })
+  }
+
+  function getAc(email) {
+    if(!email) return
+
+    
+  fetch("/get-ip", {
+    method: "post",
+    headers: {
+      "Content-type": "application/json",
+    },
+    body: JSON.stringify({
+      email,
+    }),
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .then((response) => {
+      if(response.Item){
+        const {Accounts} = response.Item
+        if(!Accounts) return;
+        if(Accounts.length ===0) return;
+        document.getElementById("accounts").classList.remove('hidden')
+        
+        Accounts.map(function(i,ind){
+          const ul = document.getElementById("accounts-ul")
+          const li=document.createElement("li");
+          function fn(){
+            remIp(email,ind)
+          }
+          li.id="accounts-li-"+ind
+          const btn = document.createElement("button")
+          btn.className="bg-pasha hover:bg-white hover:shadow-outline hover:text-pasha hover:border hover:border-black focus:shadow-outline text-white focus:bg-white focus:text-pasha font-light py-1 px-2 rounded-md"
+          btn.onclick=fn
+          btn.innerHTML="X"
+          li.innerHTML = `Account Number: <span>${i.ANo}</span> Server: <span>${i.server}</span>`
+          li.appendChild(btn)
+          ul.appendChild(li)
+        })
+      }
+    })
+
+  }
+
+  const params = new URLSearchParams(document.location.search.substring(1));
+  const customerId = params.get("customerId");
+  fetch("/customer", {
+    method: "post",
+    headers: {
+      "Content-type": "application/json",
+    },
+    body: JSON.stringify({
+      id: customerId,
+    }),
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .then((response) => {
+      if(response.result){
+        response.result.map(i=>{
+          if(i.subs.length>0){
+            i.subs.map(it=>{
+              if(it==="FOREX") {
+                document.getElementById("submit-Forex").classList.add("hidden")
+                const btn = document.getElementById("Download-Forex")
+                btn.classList.remove("hidden")
+                const dnl = "Robot/Forex HandsFree Robot.ex4";
+                btn.addEventListener("click", function (e) {
+                    window.location = dnl;
+                  });
+              }
+              if(it==="CRYPTO") {
+                document.getElementById("submit-Crypto").classList.add("hidden")
+                const btn = document.getElementById("Download-Crypto")
+                btn.classList.remove("hidden")
+                const dnl = "Robot/Crypto HandsFree Robot.ex4";
+                btn.addEventListener("click", function (e) {
+                    window.location = dnl;
+                  });
+              }
+              if(it==="INDICES") {
+                document.getElementById("submit-Indices").classList.add("hidden")
+                const btn = document.getElementById("Download-Indices")
+                btn.classList.remove("hidden")
+                const dnl = "Robot/Indices HandsFree Robot.ex4";
+                btn.addEventListener("click", function (e) {
+                    window.location = dnl;
+                  });
+              }
+              if(it==="STOCK") {
+                document.getElementById("submit-Stock").classList.add("hidden")
+                const btn = document.getElementById("Download-Stock")
+                btn.classList.remove("hidden")
+                const dnl = "Robot/Stock HandsFree Robot.ex4";
+                btn.addEventListener("click", function (e) {
+                    window.location = dnl;
+                  });
+              }
+              console.log(it)
+            })
+          }
+        })
+      }
+              getAc(response.email)
+    });
+</script>
+
+</html>
