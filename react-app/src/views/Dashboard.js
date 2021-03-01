@@ -1,13 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import Product from "../component/Product";
 import { p } from "../products";
 import Stripe from "../component/stripe";
 import Accounts from "../component/Accounts";
 import file from "../files/EA_instructions.pdf";
+import { UserC } from "../hook/user";
 
 function Dashboard() {
   const [my, setMy] = useState(true);
   const [sp, setSp] = useState(null);
+  const { user, removeAccount } = useContext(UserC);
 
   return (
     <div className="antialiased p-6">
@@ -80,7 +82,9 @@ function Dashboard() {
             ))}
           </div>
 
-          <Accounts />
+          {user && user.accounts.length > 0 && (
+            <Accounts acc={user.accounts} rem={removeAccount} />
+          )}
           {sp && <Stripe p={sp} my={my} />}
         </div>
       </div>

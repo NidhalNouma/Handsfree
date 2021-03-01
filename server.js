@@ -3,6 +3,7 @@ const app = express();
 const { resolve } = require("path");
 const bodyParser = require("body-parser");
 require("dotenv").config({ path: "./.env" });
+const user = require("./App");
 
 const {
   findUser,
@@ -79,6 +80,8 @@ app.use((req, res, next) => {
     bodyParser.json()(req, res, next);
   }
 });
+
+app.use(user);
 
 app.get("/", (req, res) => {
   const path = resolve(process.env.HTML_DIR + "/index.html");
@@ -311,94 +314,94 @@ app.post(
   }
 );
 
-app.post("/customer", async function (req, res) {
-  const r = {
-    found: false,
-    type: null,
-    sub: false,
-    Accounts: 0,
-    result: null,
-    email: "",
-  };
-  if (!req.body.email && !req.body.id) {
-    res.json(r);
-    return;
-  }
+// app.post("/customer", async function (req, res) {
+//   const r = {
+//     found: false,
+//     type: null,
+//     sub: false,
+//     Accounts: 0,
+//     result: null,
+//     email: "",
+//   };
+//   if (!req.body.email && !req.body.id) {
+//     res.json(r);
+//     return;
+//   }
 
-  let email = req.body.email;
-  let customers = req.body.id;
-  if (!customers) {
-    customers = await stripe.customers.list({
-      email: email,
-    });
-    if (customers.data.length === 0) return res.json({ err: "invalid Email" });
-    customers = customers.data[0].id;
-  }
-  if (!email) {
-    const customer = await stripe.customers.retrieve(customers);
-    if (!customer.email) return res.json({ err: "invalid Email" });
-    email = customer.email;
-  }
+//   let email = req.body.email;
+//   let customers = req.body.id;
+//   if (!customers) {
+//     customers = await stripe.customers.list({
+//       email: email,
+//     });
+//     if (customers.data.length === 0) return res.json({ err: "invalid Email" });
+//     customers = customers.data[0].id;
+//   }
+//   if (!email) {
+//     const customer = await stripe.customers.retrieve(customers);
+//     if (!customer.email) return res.json({ err: "invalid Email" });
+//     email = customer.email;
+//   }
 
-  r.email = email;
-  const subscriptions = await stripe.subscriptions.list({
-    customer: customers,
-  });
+//   r.email = email;
+//   const subscriptions = await stripe.subscriptions.list({
+//     customer: customers,
+//   });
 
-  try {
-    const au = await findUser(email);
-    if (!au.Item) {
-      await addUser(customers, email);
-      r.Accounts = 0;
-    } else {
-      r.Accounts = au.Item.Accounts.length;
-    }
+//   try {
+//     const au = await findUser(email);
+//     if (!au.Item) {
+//       await addUser(customers, email);
+//       r.Accounts = 0;
+//     } else {
+//       r.Accounts = au.Item.Accounts.length;
+//     }
 
-    if (req.body.ip && req.body.server) {
-      const ap = await addIP(email, {
-        ANo: req.body.ip,
-        server: req.body.server,
-      });
-      console.log(ap);
-    }
-  } catch (e) {
-    console.log("DY_DB_CUS_ERROR => ", e);
-  }
+//     if (req.body.ip && req.body.server) {
+//       const ap = await addIP(email, {
+//         ANo: req.body.ip,
+//         server: req.body.server,
+//       });
+//       console.log(ap);
+//     }
+//   } catch (e) {
+//     console.log("DY_DB_CUS_ERROR => ", e);
+//   }
 
-  const { data } = subscriptions;
+//   const { data } = subscriptions;
 
-  if (data.length > 0) {
-    r.found = true;
-    r.result = data.map((i) => {
-      let sub = [];
-      if (i.plan) {
-        let type = null;
-        if (i.plan.id == process.env.FOREX) {
-          type = "FOREX";
-          if (type === req.body.type) r.sub = true;
-        } else if (i.plan.id == process.env.CRYPTO) {
-          type = "CRYPTO";
-          if (type === req.body.type) r.sub = true;
-        } else if (i.plan.id == process.env.INDICES) {
-          type = "INDICES";
-          if (type === req.body.type) r.sub = true;
-        } else if (i.plan.id == process.env.STOCK) {
-          type = "STOCK";
-          if (type === req.body.type) r.sub = true;
-        }
-        sub.push(type);
-        r.type = type;
-      }
-      return {
-        email: i.email,
-        id: i.id,
-        subs: sub,
-      };
-    });
-  }
+//   if (data.length > 0) {
+//     r.found = true;
+//     r.result = data.map((i) => {
+//       let sub = [];
+//       if (i.plan) {
+//         let type = null;
+//         if (i.plan.id == process.env.FOREX) {
+//           type = "FOREX";
+//           if (type === req.body.type) r.sub = true;
+//         } else if (i.plan.id == process.env.CRYPTO) {
+//           type = "CRYPTO";
+//           if (type === req.body.type) r.sub = true;
+//         } else if (i.plan.id == process.env.INDICES) {
+//           type = "INDICES";
+//           if (type === req.body.type) r.sub = true;
+//         } else if (i.plan.id == process.env.STOCK) {
+//           type = "STOCK";
+//           if (type === req.body.type) r.sub = true;
+//         }
+//         sub.push(type);
+//         r.type = type;
+//       }
+//       return {
+//         email: i.email,
+//         id: i.id,
+//         subs: sub,
+//       };
+//     });
+//   }
 
-  res.json(r);
-});
+//   res.json(r);
+// });
 
 app.post("/check-coupon", async function (req, res) {
   const r = { res: null, err: null };
@@ -445,17 +448,17 @@ app.post("/remove-ip", async function (req, res) {
   res.json(r1);
 });
 
-app.post("/result", async function (req, res) {
-  const { email, account, data } = req.body;
+// app.post("/result", async function (req, res) {
+//   const { email, account, data } = req.body;
 
-  if (!email || !account) return res.json(r);
-  try {
-    const r1 = await addResult(email, account, data);
-    return res.json({ added: true });
-  } catch (err) {
-    return res.json(err);
-  }
-});
+//   if (!email || !account) return res.json(r);
+//   try {
+//     const r1 = await addResult(email, account, data);
+//     return res.json({ added: true });
+//   } catch (err) {
+//     return res.json(err);
+//   }
+// });
 
 app.post("/message", async function (req, res) {
   let r = "";
