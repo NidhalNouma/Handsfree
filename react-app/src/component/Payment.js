@@ -5,11 +5,9 @@ import Checkout from "./stripe/CardMinimul";
 
 // Make sure to call `loadStripe` outside of a component’s render to avoid
 // recreating the `Stripe` object on every render.
-const stripePromise = loadStripe(
-  process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY_P
-);
+const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY);
 
-function Payment({ pay, my, p, close, change = false }) {
+function Payment({ pay, my, p, close, change = false, coupon }) {
   const [ne, setNe] = useState(pay.length > 0 ? false : true);
   const [pm, setPm] = useState(null);
   return (
@@ -30,9 +28,11 @@ function Payment({ pay, my, p, close, change = false }) {
           my={my}
           p={p}
           pm={pm}
+          setPm={setPm}
           show={ne}
           close={close}
           change={change}
+          coupon={coupon}
         />
       </Elements>
     </>

@@ -3,6 +3,7 @@ import { UserC } from "../hook/user";
 import { p } from "../products";
 import Payment from "./Payment";
 import { cancelSub } from "../hook/stripe";
+import moment from "moment";
 
 function Subscription({ subs }) {
   return (
@@ -36,9 +37,7 @@ const Li = ({ i }) => {
         <span className="font-bold mx-1 text-pasha">{pr}</span>
         renews
         <span className="text-pasha ml-1 mr-2">
-          {new Date(i.end * 1000).getDay().toString()}/
-          {new Date(i.end * 1000).getMonth().toString()}/
-          {new Date(i.end * 1000).getFullYear().toString()}
+          {moment(i.end * 1000).format("MMM Do YYYY")}
         </span>
         <button
           onClick={(e) => setMore(!more)}
@@ -54,12 +53,10 @@ const Li = ({ i }) => {
           role="alert"
         >
           <p className="my-0">
-            <span className="font-bold">{i.interval}</span> subscription, start
-            on
-            <span className="text-pasha ml-1 mr-2">
-              {new Date(i.start * 1000).getDay().toString()}/
-              {new Date(i.start * 1000).getMonth().toString()}/
-              {new Date(i.start * 1000).getFullYear().toString()}
+            <span className="font-bold">{i.interval}</span> subscription,
+            created at
+            <span className="text-pasha ml-1 mr-2 text-sm">
+              {moment(i.created * 1000).format("MMM Do YYYY")}
             </span>
           </p>
           <p className="my-0">

@@ -1,11 +1,11 @@
 import { useContext, useState } from "react";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
-import { createSub } from "../../hook/stripe";
+import { createSub, addPaymMethod } from "../../hook/stripe";
 import { UserC } from "../../hook/user";
 import Spinner from "../Spinner";
 // import Payment from "../Payment";
 
-const CheckoutForm = ({ my, p, pm, show, close, change }) => {
+const CheckoutForm = ({ my, p, pm, setPm, show, close, change, coupon }) => {
   const { user, setUser } = useContext(UserC);
   const [err, setErr] = useState("");
   const [spin, setSpin] = useState(false);
@@ -50,16 +50,20 @@ const CheckoutForm = ({ my, p, pm, show, close, change }) => {
       }
       console.log("[PaymentMethod]", paymentMethod);
     }
-
     if (pm === null) {
       setErr("Invalid Card, Select a card");
 
       setSpin(false);
       return;
     }
-    const priceId = my ? p.nameP : p.namePY;
-    await createSub(user._id, user.customerId, pm, priceId, setUser);
-    close();
+    if (change) {
+      console.log("change ,", pm);
+      await addPaymMethod(pm, user.customerId);
+    } else {
+      const priceId = my ? p.nameP : p.namePY;
+      await createSub(user._id, user.customerId, pm, priceId, setUser, coupon);
+      close();
+    }
     setSpin(false);
   };
 
@@ -68,7 +72,10 @@ const CheckoutForm = ({ my, p, pm, show, close, change }) => {
       {/* {user.paymentMethods.length > 0 && <Payment pay={user.paymentMethods} />} */}
       {show && (
         <div className="appearance-none block w-full bg-gray-200 text-gray-700 border rounded-md py-3 px-2 leading-tight focus:outline-none focus:bg-white">
-          <CardElement options={{ hidePostalCode: true }} />
+          <CardElement
+            onFocus={(e) => setPm(null)}
+            options={{ hidePostalCode: true }}
+          />
         </div>
       )}
       {err && (

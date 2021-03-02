@@ -12,7 +12,7 @@ function Register({ rev }) {
     <div>
       <input
         className="my-3 appearance-none border-2 border-gray-200 rounded-md w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-pasha"
-        type="text"
+        type="email"
         placeholder="Email address"
         required
         value={email}
@@ -46,7 +46,7 @@ function Register({ rev }) {
         className="w-full bg-pasha hover:shadow-outline rounded-md focus:shadow-outline text-white font-light py-2 px-4 rounded"
         onClick={(e) => user.register(email, password, cpassword, setErr)}
       >
-        <span id="button-text">Register</span>
+        <span>Register</span>
       </button>
 
       <button

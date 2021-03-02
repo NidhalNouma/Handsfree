@@ -104,8 +104,8 @@ app.post("/customer", async function (req, res) {
     }
 
     if (req.body.ip && req.body.server) {
-      const ap = await user.addAccount(email, req.body.ip, req.body.server);
-      console.log(ap);
+      const ap = await User.addAccount(email, req.body.ip, req.body.server);
+      console.log("adding new account ", ap.res ? ap.res.nModified : app.err);
     }
   } catch (e) {
     console.log("DY_DB_CUS_ERROR => ", e);
@@ -119,16 +119,28 @@ app.post("/customer", async function (req, res) {
       let sub = [];
       if (i.plan) {
         let type = null;
-        if (i.plan.id == process.env.FOREX) {
+        if (
+          i.plan.id == process.env.FOREX ||
+          i.plan.id == process.env.FOREX_Y
+        ) {
           type = "FOREX";
           if (type === req.body.type) r.sub = true;
-        } else if (i.plan.id == process.env.CRYPTO) {
+        } else if (
+          i.plan.id == process.env.CRYPTO ||
+          i.plan.id == process.env.CRYPTO_Y
+        ) {
           type = "CRYPTO";
           if (type === req.body.type) r.sub = true;
-        } else if (i.plan.id == process.env.INDICES) {
+        } else if (
+          i.plan.id == process.env.INDICES ||
+          i.plan.id == process.env.INDICES_Y
+        ) {
           type = "INDICES";
           if (type === req.body.type) r.sub = true;
-        } else if (i.plan.id == process.env.STOCK) {
+        } else if (
+          i.plan.id == process.env.STOCK ||
+          i.plan.id == process.env.STOCK_Y
+        ) {
           type = "STOCK";
           if (type === req.body.type) r.sub = true;
         }

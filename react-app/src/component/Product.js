@@ -24,7 +24,7 @@ function Product({ p, my, s, sp, subs }) {
               method="GET"
               action={"/Robot/" + p.dwnUrl}
             >
-              <button className="w-10/12 py-2 px-4 m-auto text-pasha font-bold border border-pasha hover:bg-pasha hover:text-white focus:bg-pasha focus:text-white rounded">
+              <button className="w-10/12 py-2 m-auto text-pasha font-bold border border-pasha hover:bg-pasha hover:text-white focus:bg-pasha focus:text-white rounded">
                 Download
               </button>
             </form>

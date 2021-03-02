@@ -37,3 +37,52 @@ export const cancelSub = async (subscriptionId, user, setUser) => {
     console.error("cancel Subscription .", e);
   }
 };
+
+export const checkCoupon = async (coupon, setCoupon, price, setPrice) => {
+  if (coupon.load) return;
+  if (coupon.value === "") {
+    setCoupon({ ...coupon, err: "Invalid coupon" });
+    return;
+  }
+  setCoupon({ ...coupon, err: "", load: true });
+  console.log("Checking coupon ... ", coupon.value);
+  try {
+    const r = await axios.post("/check-coupon", {
+      coupon: coupon.value,
+    });
+
+    if (r.data.err && r.data.err.raw) {
+      setCoupon({ ...coupon, err: r.data.err.raw.message, load: false });
+      setPrice({ ...price, new: -1 });
+      return;
+    } else if (r.data.res) {
+      let np = -1;
+      const off = r.data.res.percent_off;
+      const aoff = r.data.res.amount_off;
+      if (off) {
+        np = price.old - (price.old * off) / 100;
+      } else if (aoff && aoff > 0) {
+        np = price.old - aoff;
+        if (np < 0) np = 0;
+      }
+      setPrice({ ...price, new: np });
+    }
+  } catch (e) {
+    console.error("Checcking coupon .", e);
+  }
+  setCoupon({ ...coupon, load: false, err: "" });
+};
+
+export const addPaymMethod = async function (paymentMethodId, customerId) {
+  console.log("Adding Payment Method ...");
+  console.log(paymentMethodId, customerId);
+  try {
+    const r = await axios.post("/add-payment-method", {
+      customerId,
+      paymentMethodId,
+    });
+    console.log(r);
+  } catch (e) {
+    console.error("Adding Payment Method Subscription .", e);
+  }
+};

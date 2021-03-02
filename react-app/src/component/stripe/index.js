@@ -1,10 +1,16 @@
-import React, { useContext } from "react";
-// import Checkout from "./CardMinimul";
+import React, { useContext, useState } from "react";
 import Payment from "../Payment";
 import { UserC } from "../../hook/user";
+import { checkCoupon } from "../../hook/stripe";
 
 function Index({ p, my, close }) {
   const { user } = useContext(UserC);
+  const [coupon, setCoupon] = useState({ value: "", err: "", load: false });
+  const [price, setPrice] = useState({
+    old: my ? p.priceM : p.priceY,
+    new: -1,
+  });
+
   return (
     <div>
       <div className="flex justify-center ">
@@ -22,8 +28,13 @@ function Index({ p, my, close }) {
             </button>
           </div>
           <p className="text-gray-700 text-base">
-            → Total due now <span>${my ? p.priceM : p.priceY}</span>
-            <span className="spanCou"></span>
+            → Total due now{" "}
+            <span className={price.new >= 0 ? "line-through" : "text-pasha"}>
+              ${price.old}
+            </span>
+            {price.new >= 0 && (
+              <span className="font-bold text-pasha ml-1">${price.new}</span>
+            )}
           </p>
           <p className="text-gray-700 text-base mb-4">
             → Subscribing to <span className="font-bold">{p.name}</span>
@@ -36,13 +47,31 @@ function Index({ p, my, close }) {
                   Coupon
                 </label>
                 <input
-                  className="appearance-none block bg-gray-200 border rounded-md py-3 px-2 mb-3 leading-tight focus:outline-none"
+                  className="appearance-none block bg-gray-200 border rounded-md py-2 px-2 mb-3 leading-tight focus:outline-none"
                   type="text"
                   placeholder="Coupon code"
-                  required
+                  value={coupon.value}
+                  onChange={(e) =>
+                    setCoupon({ ...coupon, value: e.target.value })
+                  }
                 />
-                <button className="bg-pasha hover:shadow-outline hover:border hover:border-black focus:shadow-outline text-white font-light py-2 px-4 rounded-md">
-                  <span>Check coupon</span>
+                {coupon.err && (
+                  <div
+                    className="bg-red-100 text-red-600 px-4 py-1 rounded relative my-2"
+                    role="alert"
+                  >
+                    <span className="block sm:inline text-sm">
+                      {coupon.err}
+                    </span>
+                  </div>
+                )}
+                <button
+                  onClick={(e) =>
+                    checkCoupon(coupon, setCoupon, price, setPrice)
+                  }
+                  className="bg-pasha hover:shadow-outline hover:border hover:border-black focus:shadow-outline text-white font-light py-2 px-4 rounded-md"
+                >
+                  <span>{coupon.load ? "Checking ..." : "Check coupon"}</span>
                 </button>
               </div>
             </div>
@@ -56,6 +85,7 @@ function Index({ p, my, close }) {
                   p={p}
                   pay={user.paymentMethods}
                   close={close}
+                  coupon={coupon.value}
                 />
               </div>
             </div>
