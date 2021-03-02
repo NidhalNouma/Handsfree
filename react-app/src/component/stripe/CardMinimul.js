@@ -41,6 +41,7 @@ const CheckoutForm = ({ my, p, pm, show, close, change }) => {
 
       if (error) {
         console.log("[error]", error);
+        setErr(error.message);
         setSpin(false);
         return;
       }

@@ -33,35 +33,42 @@ const userSchema = new Schema({
 });
 
 userSchema.post("findOne", async function (res) {
+  // res.customerId = "cus_IuFu90sFYKSbBf";
   if (res && res.customerId) {
-    const cus = await stripe.customers.retrieve(res.customerId);
-    if (cus) {
-      // res["stripe"] = cus;
-      if (cus.subscriptions) {
-        const { data } = cus.subscriptions;
-        const sub = data.map((i) => {
-          let price = null;
-          for (v in process.env) {
-            if (process.env[v] === i.plan.id) price = v;
-          }
-          return {
-            created: i.created,
-            start: i.current_period_start,
-            end: i.current_period_end,
-            amount: i.plan.amount,
-            status: i.status,
-            id: i.id,
-            price: price,
-            interval: i.plan.interval,
-          };
-        });
-        res["subs"] = sub;
-      }
-    }
-    const paymeth = await stripe.paymentMethods.list({
+    const cusP = stripe.customers.retrieve(res.customerId);
+    const subscriptionsP = stripe.subscriptions.list({
+      customer: res.customerId,
+    });
+    const paymethP = stripe.paymentMethods.list({
       customer: res.customerId,
       type: "card",
     });
+    const [cus, subscriptions, paymeth] = await Promise.all([
+      cusP,
+      subscriptionsP,
+      paymethP,
+    ]);
+    res["stripe"] = cus;
+    if (subscriptions && subscriptions.data && subscriptions.data.length > 0) {
+      const { data } = subscriptions;
+      const sub = data.map((i) => {
+        let price = null;
+        for (v in process.env) {
+          if (process.env[v] === i.plan.id) price = v;
+        }
+        return {
+          created: i.created,
+          start: i.current_period_start,
+          end: i.current_period_end,
+          amount: i.plan.amount,
+          status: i.status,
+          id: i.id,
+          price: price,
+          interval: i.plan.interval,
+        };
+      });
+      res["subs"] = sub;
+    }
     if (paymeth) {
       const { data } = paymeth;
       if (data) res.paymentMethods = data;
