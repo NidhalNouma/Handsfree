@@ -3,13 +3,14 @@ import Product from "../component/Product";
 import { p } from "../products";
 import Stripe from "../component/stripe";
 import Accounts from "../component/Accounts";
+import Subscription from "../component/Subscription";
 import file from "../files/EA_instructions.pdf";
 import { UserC } from "../hook/user";
 
 function Dashboard() {
   const [my, setMy] = useState(true);
   const [sp, setSp] = useState(null);
-  const { user, removeAccount } = useContext(UserC);
+  const { user, removeAccount, signOut } = useContext(UserC);
 
   return (
     <div className="antialiased p-6">
@@ -40,7 +41,7 @@ function Dashboard() {
           <button
             className="bg-white hover:shadow-outline  hover:border hover:border-black focus:shadow-outline text-pasha focus:bg-white focus:text-pasha font-light py-2 px-4 rounded"
             type="button"
-            //onclick="resetDemo()"
+            onClick={signOut}
           >
             Sign out
           </button>
@@ -78,14 +79,23 @@ function Dashboard() {
 
           <div className="justify-between mb-8 grid grid-cols-2 md:grid-cols-4">
             {p.map((p, i) => (
-              <Product key={i} p={p} sp={sp} my={my} s={() => setSp(p)} />
+              <Product
+                key={i}
+                p={p}
+                sp={sp}
+                my={my}
+                s={() => setSp(p)}
+                subs={user.subs}
+              />
             ))}
           </div>
+          {sp && <Stripe p={sp} my={my} close={() => setSp(false)} />}
+
+          {user && user.subs.length > 0 && <Subscription subs={user.subs} />}
 
           {user && user.accounts.length > 0 && (
             <Accounts acc={user.accounts} rem={removeAccount} />
           )}
-          {sp && <Stripe p={sp} my={my} />}
         </div>
       </div>
     </div>

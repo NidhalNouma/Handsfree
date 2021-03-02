@@ -100,7 +100,7 @@ export const User = () => {
     return r;
   };
 
-  return { user, login, register, signOut, removeAccount, load };
+  return { user, setUser, login, register, signOut, removeAccount, load };
 };
 
 function rmAccount(name, server, acc) {

@@ -35,6 +35,23 @@ app.post("/account/hide", async function (req, res) {
   res.json(r);
 });
 
+app.post("/check-ip", async function (req, res) {
+  let r = { valid: false, accounts: {} };
+  const { ip, email } = req.body;
+  if (!ip || !email) return res.json(r);
+
+  const r1 = await User.findAccount(email, ip);
+  if (r1.err) return res.json(r);
+
+  const { accounts } = r1.res;
+  r.accounts = accounts;
+
+  accounts.map((i) => {
+    if (i.name === ip) r.valid = true;
+  });
+  res.json(r);
+});
+
 app.post("/result", async function (req, res) {
   const { email, account: name, data: result } = req.body;
   if (!email || !name) return res.json("Email and account require");

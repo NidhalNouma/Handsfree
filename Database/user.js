@@ -12,6 +12,8 @@ mongoose.connect(process.env.MONGODB_URL, {
 const userSchema = new Schema({
   customerId: { type: String },
   stripe: {},
+  subs: [],
+  paymentMethods: [],
   email: {
     type: String,
     required: [true, "Email is require"],
@@ -34,7 +36,35 @@ userSchema.post("findOne", async function (res) {
   if (res && res.customerId) {
     const cus = await stripe.customers.retrieve(res.customerId);
     if (cus) {
-      res["stripe"] = cus;
+      // res["stripe"] = cus;
+      if (cus.subscriptions) {
+        const { data } = cus.subscriptions;
+        const sub = data.map((i) => {
+          let price = null;
+          for (v in process.env) {
+            if (process.env[v] === i.plan.id) price = v;
+          }
+          return {
+            created: i.created,
+            start: i.current_period_start,
+            end: i.current_period_end,
+            amount: i.plan.amount,
+            status: i.status,
+            id: i.id,
+            price: price,
+            interval: i.plan.interval,
+          };
+        });
+        res["subs"] = sub;
+      }
+    }
+    const paymeth = await stripe.paymentMethods.list({
+      customer: res.customerId,
+      type: "card",
+    });
+    if (paymeth) {
+      const { data } = paymeth;
+      if (data) res.paymentMethods = data;
     }
   }
 });
@@ -121,6 +151,21 @@ const findById = async function (_id) {
   return r;
 };
 
+const findAccount = async function (email, account) {
+  const r = { res: null, err: null };
+
+  try {
+    r.res = await User.findOne({ email, "accounts.name": account }).select(
+      "-password -accounts.result -accounts.show -subs -stripe -paymentMethods"
+    );
+  } catch (err) {
+    r.err = err.message;
+  }
+
+  console.log("Finding user account(ip) ... ", r.err);
+  return r;
+};
+
 const addAccount = async function (email, name, server) {
   const r = { res: null, err: null };
 
@@ -188,6 +233,7 @@ module.exports = {
   findByEmail,
   findByToken,
   findById,
+  findAccount,
   addAccount,
   hideAccount,
   addResult,

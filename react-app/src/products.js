@@ -5,6 +5,9 @@ export const p = [
     priceM: "100",
     priceY: "1000",
     img: "forex.png",
+    nameP: "FOREX",
+    namePY: "FOREX_Y",
+    dwnUrl: "Forex HandsFree Robot.ex4",
   },
   {
     name: "Stock",
@@ -12,6 +15,9 @@ export const p = [
     priceM: "135",
     priceY: "1350",
     img: "Stock.png",
+    nameP: "STOCK",
+    namePY: "STOCK_Y",
+    dwnUrl: "Stock HandsFree Robot.ex4",
   },
   {
     name: "Crypto",
@@ -19,6 +25,9 @@ export const p = [
     priceM: "150",
     priceY: "1500",
     img: "crypto.png",
+    nameP: "CRYPTO",
+    namePY: "CRYPTO_Y",
+    dwnUrl: "Crypto HandsFree Robot.ex4",
   },
   {
     name: "Indices",
@@ -26,5 +35,8 @@ export const p = [
     priceM: "200",
     priceY: "2000",
     img: "indices.png",
+    nameP: "INDICES",
+    namePY: "INDICES_Y",
+    dwnUrl: "Indices HandsFree Robot.ex4",
   },
 ];

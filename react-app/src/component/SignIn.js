@@ -27,14 +27,14 @@ function SignIn({ rev }) {
       />
       {err && (
         <div
-          className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-3"
+          className="bg-red-100 text-red-700 px-4 py-2 rounded relative mb-3"
           role="alert"
         >
           <span className="block sm:inline">{err}</span>
         </div>
       )}
       <button
-        className="w-full bg-pasha hover:bg-red-200 hover:shadow-outline rounded-md hover:text-pasha hover:border hover:border-black focus:shadow-outline text-white focus:bg-white focus:text-pasha font-light py-2 px-4 rounded"
+        className="w-full bg-pasha hover:shadow-outline rounded-md focus:shadow-outline text-white font-light py-2 px-4 rounded"
         onClick={(e) => user.login(email, password, setErr)}
       >
         <div id="loading" className="hidden">
