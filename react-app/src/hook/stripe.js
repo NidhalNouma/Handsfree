@@ -73,15 +73,18 @@ export const checkCoupon = async (coupon, setCoupon, price, setPrice) => {
   setCoupon({ ...coupon, load: false, err: "" });
 };
 
-export const addPaymMethod = async function (paymentMethodId, customerId) {
+export const addPaymMethod = async function (paymentMethod, user, setUser) {
   console.log("Adding Payment Method ...");
-  console.log(paymentMethodId, customerId);
   try {
     const r = await axios.post("/add-payment-method", {
-      customerId,
-      paymentMethodId,
+      customerId: user.customerId,
+      paymentMethodId: paymentMethod.id,
     });
     console.log(r);
+    setUser({
+      ...user,
+      paymentMethods: [paymentMethod, ...user.paymentMethods],
+    });
   } catch (e) {
     console.error("Adding Payment Method Subscription .", e);
   }

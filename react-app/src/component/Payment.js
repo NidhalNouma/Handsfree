@@ -3,6 +3,9 @@ import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import Checkout from "./stripe/CardMinimul";
 
+import Visa from "./svg/Visa";
+import Mastercard from "./svg/Mastercard";
+
 // Make sure to call `loadStripe` outside of a component’s render to avoid
 // recreating the `Stripe` object on every render.
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY);
@@ -30,6 +33,7 @@ function Payment({ pay, my, p, close, change = false, coupon }) {
           pm={pm}
           setPm={setPm}
           show={ne}
+          setShow={setNe}
           close={close}
           change={change}
           coupon={coupon}
@@ -51,7 +55,13 @@ const Card = ({ i, set, pm }) => {
       }
     >
       <span className="ml-1 my-2 py-2 px-3 bg-gray-500 text-white rounded">
-        {i.card.brand}
+        {i.card.brand === "visa" ? (
+          <Visa />
+        ) : i.card.brand === "mastercard" ? (
+          <Mastercard />
+        ) : (
+          i.card.brand
+        )}
       </span>
 
       <div className="flex flex-col mx-4 items-start">

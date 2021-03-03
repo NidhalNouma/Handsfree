@@ -10,7 +10,7 @@ import { User, UserC } from "./hook/user";
 
 function App() {
   const user = User();
-  console.log(user.user);
+  // console.log(user.user);
 
   return (
     <>

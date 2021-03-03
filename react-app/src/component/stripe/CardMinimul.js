@@ -5,7 +5,17 @@ import { UserC } from "../../hook/user";
 import Spinner from "../Spinner";
 // import Payment from "../Payment";
 
-const CheckoutForm = ({ my, p, pm, setPm, show, close, change, coupon }) => {
+const CheckoutForm = ({
+  my,
+  p,
+  pm,
+  setPm,
+  show,
+  setShow,
+  close,
+  change,
+  coupon,
+}) => {
   const { user, setUser } = useContext(UserC);
   const [err, setErr] = useState("");
   const [spin, setSpin] = useState(false);
@@ -27,6 +37,7 @@ const CheckoutForm = ({ my, p, pm, setPm, show, close, change, coupon }) => {
       setSpin(false);
       return;
     }
+    let pmt = null;
     if (show && !pm) {
       // Get a reference to a mounted CardElement. Elements knows how
       // to find your CardElement because there can only ever be one of
@@ -47,6 +58,7 @@ const CheckoutForm = ({ my, p, pm, setPm, show, close, change, coupon }) => {
       }
       if (!pm) {
         pm = paymentMethod.id;
+        pmt = paymentMethod;
       }
       console.log("[PaymentMethod]", paymentMethod);
     }
@@ -58,7 +70,8 @@ const CheckoutForm = ({ my, p, pm, setPm, show, close, change, coupon }) => {
     }
     if (change) {
       console.log("change ,", pm);
-      await addPaymMethod(pm, user.customerId);
+      await addPaymMethod(pmt, user, setUser);
+      setShow(false);
     } else {
       const priceId = my ? p.nameP : p.namePY;
       await createSub(user._id, user.customerId, pm, priceId, setUser, coupon);

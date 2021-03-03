@@ -71,14 +71,14 @@ const Li = ({ i }) => {
           <div>
             <div className="flex">
               <button className="text-pasha" onClick={() => setChp(!chp)}>
-                change payment method
+                {chp ? "Hide payment method" : "Change payment method"}
               </button>
 
               <button
                 onClick={(e) => setRem(!rem)}
                 className="ml-auto text-pasha border hover:border-pasha hover:shadow-outline hover:border focus:shadow-outline text-white font-light py-0 px-2 rounded-md"
               >
-                X
+                Cancel
               </button>
             </div>
             {chp && <Payment pay={user.paymentMethods} change={true} />}
