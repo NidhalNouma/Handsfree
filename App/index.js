@@ -117,7 +117,7 @@ app.post("/customer", async function (req, res) {
     r.found = true;
     r.result = data.map((i) => {
       let sub = [];
-      if (i.plan) {
+      if (i.plan && i.status === "active") {
         let type = null;
         if (
           i.plan.id == process.env.FOREX ||
