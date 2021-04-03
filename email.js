@@ -232,7 +232,7 @@ async function sendResetEmail(email, url) {
 `;
   let info = await transport.sendMail({
     from: '"HandsFree 👻" <' + process.env.EMAIL + ">", // sender address
-    to: "nidhal.nouma.0@gmail.com", //email, // list of receivers
+    to: email, // list of receivers
     subject: "Reset Password ✔", // Subject line
     html, // html body
   });
