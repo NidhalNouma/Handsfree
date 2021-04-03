@@ -69,6 +69,72 @@ export const User = () => {
     return r;
   };
 
+  const forgetPassword = async (email, setErr, setDone) => {
+    setErr("");
+    setDone(false);
+    if (!email) {
+      setErr("Email required");
+      return;
+    }
+
+    console.log("forget password ... ", email);
+    const r = { res: null, err: null };
+    try {
+      const { data } = await axios.post("/user/forget", { email });
+      console.log(data);
+      if (data.res) {
+        setDone(true);
+        r.res = data.res;
+      } else {
+        r.err = data.err;
+        setErr(data.err);
+      }
+    } catch (e) {
+      r.err = e;
+      console.error(e);
+      setErr(e);
+    }
+    return r;
+  };
+
+  const resetPassword = async (email, password, cpassword, setErr, setDone) => {
+    setErr("");
+    if (!email) {
+      setErr("Email required");
+      return;
+    }
+    if (!password) {
+      setErr("Password required");
+      return;
+    }
+    if (cpassword !== password) {
+      setErr("Password not match");
+      return;
+    }
+
+    console.log("reset password ... ", email);
+    const r = { res: null, err: null };
+    try {
+      const { data } = await axios.post("/user/reset-password", {
+        email,
+        password,
+      });
+      console.log(data);
+      if (data.res) {
+        setDone(true);
+        r.res = data.res;
+      } else {
+        r.err = data.err;
+        setErr(data.err);
+      }
+    } catch (e) {
+      r.err = e;
+      console.error(e);
+      setErr(e);
+    }
+    return r;
+  };
+
   const signOut = () => {
     localStorage.removeItem("user");
     setUser(null);
@@ -100,7 +166,17 @@ export const User = () => {
     return r;
   };
 
-  return { user, setUser, login, register, signOut, removeAccount, load };
+  return {
+    user,
+    setUser,
+    login,
+    register,
+    signOut,
+    removeAccount,
+    load,
+    forgetPassword,
+    resetPassword,
+  };
 };
 
 function rmAccount(name, server, acc) {

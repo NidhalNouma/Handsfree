@@ -6,6 +6,8 @@ import {
 } from "react-router-dom";
 import Welcome from "./views/Welcom";
 import Dashboard from "./views/Dashboard";
+import ForgetPassword from "./views/ForgetPassword";
+import ResetPassword from "./views/ResetPassword";
 import { User, UserC } from "./hook/user";
 
 function App() {
@@ -23,6 +25,12 @@ function App() {
               </Route>
               <Route exact path="/">
                 {!user.user ? <Welcome /> : <Redirect to="/dashboard" />}
+              </Route>
+              <Route exact path="/forget-password">
+                {!user.user ? <ForgetPassword /> : <Redirect to="/dashboard" />}
+              </Route>
+              <Route exact path="/user/reset-password/:email/:token">
+                {!user.user ? <ResetPassword /> : <Redirect to="/dashboard" />}
               </Route>
             </Switch>
           </Router>

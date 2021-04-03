@@ -2,6 +2,7 @@ require("dotenv").config();
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const mongoose = require("mongoose");
 const { Schema, model } = mongoose;
+const sendMail = require("../email");
 
 mongoose.connect(process.env.MONGODB_URL, {
   useNewUrlParser: true,
@@ -20,6 +21,7 @@ const userSchema = new Schema({
     unique: [true, "Email exist"],
   },
   password: { type: String, required: true },
+  forgetPassword: { token: { type: String }, createdAt: { type: Date } },
   rememberToken: { type: String },
   createdAt: { type: Date, default: Date.now() },
   accounts: [
@@ -97,6 +99,74 @@ const addUser = async function (email, password) {
   }
 
   console.log("adding new user ... ", r.err);
+  return r;
+};
+
+const forgetPassword = async function (email, url) {
+  const r = { res: null, err: null };
+
+  const id = mongoose.Types.ObjectId();
+  const time = new Date();
+
+  try {
+    const rr = await User.updateOne(
+      { email },
+      {
+        "forgetPassword.token": id,
+        "forgetPassword.createdAt": time,
+      }
+    );
+    if (rr.ok < 1 || rr.nModified < 1) r.err = "Email Not Exist!";
+    else {
+      const send = await sendMail.sendResetEmail(
+        email,
+        url + "/user/reset-password/" + email + "/" + id
+      );
+      r.res = rr;
+    }
+  } catch (err) {
+    console.log(err);
+    r.err = "Email Not Exist!";
+  }
+
+  console.log("forget password user ... ", r.err);
+  return r;
+};
+
+const resetPassword = async function (email, password) {
+  const r = { res: null, err: null };
+
+  try {
+    const rr = await User.updateOne({ email }, { password });
+    r.res = rr;
+  } catch (err) {
+    console.log(err);
+    r.err = err;
+  }
+
+  console.log("reset password user ... ", r.err);
+  return r;
+};
+
+const confirmResetPassword = async function (email, token) {
+  const r = { ok: null, err: null };
+
+  try {
+    const rr = await User.findOne({
+      email,
+      "forgetPassword.token": token,
+    }).select("email forgetPassword");
+    if (rr) {
+      const t = new Date() - rr.forgetPassword.createdAt;
+      console.log(t);
+      if (t < 3600 * 100) r.ok = true;
+    }
+  } catch (err) {
+    console.log(err);
+    r.err = "Email Not Exist!";
+  }
+
+  console.log("confirm reset password user ... ", r.err);
   return r;
 };
 
@@ -237,6 +307,9 @@ const addResult = async function (email, name, result) {
 module.exports = {
   addUser,
   findOne,
+  forgetPassword,
+  resetPassword,
+  confirmResetPassword,
   findByEmail,
   findByToken,
   findById,

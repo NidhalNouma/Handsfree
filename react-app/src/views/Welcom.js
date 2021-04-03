@@ -19,7 +19,7 @@ function Welcom() {
       </nav>
       <div className="flex justify-center">
         <div className="w-full max-w-sm m-6">
-          <div className="w-1/3 flex items-center mb-8 w-full">
+          <div className="flex items-center mb-8 w-full">
             <video
               width="320"
               height="240"

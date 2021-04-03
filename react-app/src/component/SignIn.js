@@ -1,4 +1,5 @@
 import React, { useContext, useState } from "react";
+import { Link } from "react-router-dom";
 import { UserC } from "../hook/user";
 
 function SignIn({ rev }) {
@@ -34,7 +35,7 @@ function SignIn({ rev }) {
         </div>
       )}
       <button
-        className="w-full bg-pasha hover:shadow-outline rounded-md focus:shadow-outline text-white font-light py-2 px-4 rounded"
+        className="w-full bg-pasha hover:shadow-outline focus:shadow-outline text-white font-light py-2 px-4 rounded"
         onClick={(e) => user.login(email, password, setErr)}
       >
         <div id="loading" className="hidden">
@@ -43,6 +44,12 @@ function SignIn({ rev }) {
         <span id="button-text">Login</span>
       </button>
 
+      <Link
+        className="text-pasha outline-none mt-3 px-2 float-left text-sm"
+        to="/forget-password"
+      >
+        Forget password?
+      </Link>
       <button
         className="text-pasha outline-none mt-3 px-2 float-right"
         onClick={rev}

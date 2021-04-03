@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 require("dotenv").config({ path: "./.env" });
+const { resolve } = require("path");
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const User = require("../Database/user");
 
@@ -14,6 +15,32 @@ app.post("/user", async function (req, res) {
   const { email, password } = req.body;
   console.log(email);
   const r = await User.findOne(email, password);
+  res.json(r);
+});
+
+app.post("/user/forget", async function (req, res) {
+  const { email } = req.body;
+  console.log(email);
+  const url = req.protocol + "://" + req.get("host");
+  const r = await User.forgetPassword(email, url);
+  res.json(r);
+});
+
+app.get("/user/reset-password/:email/:token", async function (req, res) {
+  const { email, token } = req.params;
+  console.log(email);
+  const r = await User.confirmResetPassword(email, token);
+
+  if (r.ok) {
+    const path = resolve(process.env.HTML_DIR + "/index.html");
+    return res.sendFile(path);
+  } else return res.redirect("/");
+});
+
+app.post("/user/reset-password", async function (req, res) {
+  const { email, password } = req.body;
+  console.log(email);
+  const r = await User.resetPassword(email, password);
   res.json(r);
 });
 
