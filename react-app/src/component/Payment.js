@@ -39,11 +39,13 @@ function Payment({ pay, my, p, close, change = false, coupon }) {
           coupon={coupon}
         />
       </Elements>
-      {p && (
+      {p ? (
         <div>
           <h4>Or</h4>
           <Paypal p={p} my={my} />
         </div>
+      ) : (
+        <></>
       )}
     </>
   );

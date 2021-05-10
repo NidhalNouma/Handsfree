@@ -13,7 +13,7 @@ function Index({ p, my, close }) {
 
   useEffect(() => {
     setPrice({ old: my ? p.priceM : p.priceY, new: -1 });
-  }, [p]);
+  }, [p, my]);
 
   return (
     <div>
@@ -26,7 +26,7 @@ function Index({ p, my, close }) {
             </div>
             <button
               onClick={close}
-              className="h-7 bg-white text-pasha border hover:border-pasha hover:shadow-outline hover:border focus:shadow-outline text-white focus:bg-white font-light py-0 px-2 rounded-md"
+              className="h-7 bg-white text-pasha border hover:border-pasha hover:shadow-outline hover:border focus:shadow-outline focus:bg-white font-light py-0 px-2 rounded-md"
             >
               X
             </button>
