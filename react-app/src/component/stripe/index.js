@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import Payment from "../Payment";
 import { UserC } from "../../hook/user";
 import { checkCoupon } from "../../hook/stripe";
@@ -10,6 +10,10 @@ function Index({ p, my, close }) {
     old: my ? p.priceM : p.priceY,
     new: -1,
   });
+
+  useEffect(() => {
+    setPrice({ old: my ? p.priceM : p.priceY, new: -1 });
+  }, [p]);
 
   return (
     <div>
