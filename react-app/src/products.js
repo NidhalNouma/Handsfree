@@ -7,6 +7,8 @@ export const p = [
     img: "forex.png",
     nameP: "FOREX",
     namePY: "FOREX_Y",
+    paypal: document.getElementById("forex-plan-m").innerHTML,
+    paypalY: document.getElementById("forex-plan-y").innerHTML,
     dwnUrl: "Forex HandsFree Robot.ex4",
   },
   {
@@ -17,6 +19,8 @@ export const p = [
     img: "Stock.png",
     nameP: "STOCK",
     namePY: "STOCK_Y",
+    paypal: document.getElementById("stock-plan-m").innerHTML,
+    paypalY: document.getElementById("stock-plan-y").innerHTML,
     dwnUrl: "Stock HandsFree Robot.ex4",
   },
   {
@@ -27,6 +31,8 @@ export const p = [
     img: "crypto.png",
     nameP: "CRYPTO",
     namePY: "CRYPTO_Y",
+    paypal: document.getElementById("crypto-plan-m").innerHTML,
+    paypalY: document.getElementById("crypto-plan-y").innerHTML,
     dwnUrl: "Crypto HandsFree Robot.ex4",
   },
   {
@@ -37,6 +43,8 @@ export const p = [
     img: "indices.png",
     nameP: "INDICES",
     namePY: "INDICES_Y",
+    paypal: document.getElementById("indices-plan-m").innerHTML,
+    paypalY: document.getElementById("indices-plan-y").innerHTML,
     dwnUrl: "Indices HandsFree Robot.ex4",
   },
 ];

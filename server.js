@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 require("dotenv").config({ path: "./.env" });
 const user = require("./App");
 const stripe = require("./App/stripe");
+const paypal = require("./App/paypal");
 
 const {
   // findUser,
@@ -82,6 +83,7 @@ app.use((req, res, next) => {
 
 app.use(user);
 app.use(stripe);
+app.use("/paypal", paypal);
 
 app.get("/", (req, res) => {
   const path = resolve(process.env.HTML_DIR + "/index.html");

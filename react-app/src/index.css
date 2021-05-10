@@ -190,3 +190,44 @@ button:focus {
     transform: translate(24px, 0);
   }
 }
+
+
+.paypal-logo {
+  font-family: Verdana, Tahoma;
+  font-weight: bold;
+  font-size: 26px;
+}
+.paypal-logo i:first-child {
+  color: #253b80;
+}
+.paypal-logo i:last-child {
+  color: #179bd7;
+}
+.paypal-button {
+  padding: 11px 30px;
+  border: 1px solid silver;
+  border-radius: 7px;
+  /* background-image: linear-gradient(#fff0a8, #f9b421); */
+  margin: 0 auto;
+  display: block;
+  min-width: 138px;
+  position: relative;
+  width: 100%;
+}
+
+.paypal-button:hover{
+  background-color: silver; 
+}
+
+.paypal-button-title {
+  margin-left: 0.6rem;
+  font-size: 14px;
+  color: #505050;
+  vertical-align: baseline;
+  text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.6);
+}
+.paypal-button .paypal-logo {
+  display: inline-block;
+  text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.6);
+  font-size: 20px;
+}

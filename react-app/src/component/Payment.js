@@ -5,6 +5,7 @@ import Checkout from "./stripe/CardMinimul";
 
 import Visa from "./svg/Visa";
 import Mastercard from "./svg/Mastercard";
+import Paypal from "./Paypal";
 
 // Make sure to call `loadStripe` outside of a component’s render to avoid
 // recreating the `Stripe` object on every render.
@@ -25,7 +26,6 @@ function Payment({ pay, my, p, close, change = false, coupon }) {
           </button>
         )}
       </div>
-
       <Elements stripe={stripePromise}>
         <Checkout
           my={my}
@@ -39,6 +39,12 @@ function Payment({ pay, my, p, close, change = false, coupon }) {
           coupon={coupon}
         />
       </Elements>
+      {p && (
+        <div>
+          <h4>Or</h4>
+          <Paypal p={p} my={my} />
+        </div>
+      )}
     </>
   );
 }

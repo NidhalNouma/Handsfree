@@ -20,6 +20,16 @@ const userSchema = new Schema({
     required: [true, "Email is require"],
     unique: [true, "Email exist"],
   },
+  paypal: {
+    paypal: {},
+    subscription: {
+      forex: { type: String, default: null },
+      indices: { type: String, default: null },
+      crypto: { type: String, default: null },
+      stock: { type: String, default: null },
+    },
+    planId: [{ type: String }],
+  },
   password: { type: String, required: true },
   forgetPassword: { token: { type: String }, createdAt: { type: Date } },
   rememberToken: { type: String },
@@ -74,6 +84,8 @@ userSchema.post("findOne", async function (res) {
     if (paymeth) {
       const { data } = paymeth;
       if (data) res.paymentMethods = data;
+    }
+    if (res.paypal.subscriptionId != null) {
     }
   }
 });
@@ -304,6 +316,42 @@ const addResult = async function (email, name, result) {
   return r;
 };
 
+const paypalSubscribe = async function (email, pId, type) {
+  const r = { res: null, err: null, usr: null };
+  let md = {};
+  switch (type) {
+    case "Forex":
+      md = { "paypal.subscription.forex": pId };
+      break;
+    case "Crypto":
+      md = { "paypal.subscription.crypto": pId };
+      break;
+    case "Indices":
+      md = { "paypal.subscription.indices": pId };
+      break;
+    case "Stock":
+      md = { "paypal.subscription.stock": pId };
+      break;
+  }
+
+  const fe = await User.findOne({ email });
+  r.usr = fe;
+  // console.log(fe, type);
+  if (!fe) {
+    const user = new User({ email, password: email, ...md });
+    r.res = await user.save();
+  } else {
+    try {
+      r.res = await User.updateOne({ email }, md);
+    } catch (err) {
+      r.err = err.message;
+    }
+  }
+
+  console.log("Adding paypal subscriptionId to user ... ", r.err);
+  return r;
+};
+
 module.exports = {
   addUser,
   findOne,
@@ -317,4 +365,5 @@ module.exports = {
   addAccount,
   hideAccount,
   addResult,
+  paypalSubscribe,
 };

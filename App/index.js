@@ -125,9 +125,32 @@ app.post("/customer", async function (req, res) {
     if (!au.res) {
       //   await addUser(customers, email);
       return res.json({ err: "Email not register" });
-      r.Accounts = 0;
     } else {
       r.Accounts = au.res.accounts.length;
+      if (au.res.paypal.subscription.forex != null) {
+        r.found = true;
+        console.log(au.res);
+        // to-do add forex paypal subscription check
+        r.sub = true;
+      }
+      if (au.res.paypal.subscription.crypto != null) {
+        r.found = true;
+        console.log(au.res);
+        // to-do add forex paypal subscription check
+        r.sub = true;
+      }
+      if (au.res.paypal.subscription.indices != null) {
+        r.found = true;
+        console.log(au.res);
+        // to-do add forex paypal subscription check
+        r.sub = true;
+      }
+      if (au.res.paypal.subscription.stock != null) {
+        r.found = true;
+        console.log(au.res);
+        // to-do add forex paypal subscription check
+        r.sub = true;
+      }
     }
 
     if (req.body.ip && req.body.server) {
@@ -142,7 +165,7 @@ app.post("/customer", async function (req, res) {
 
   if (data.length > 0) {
     r.found = true;
-    r.result = data.map((i) => {
+    const da = data.map((i) => {
       let sub = [];
       if (i.plan && i.status === "active") {
         let type = null;
@@ -180,6 +203,7 @@ app.post("/customer", async function (req, res) {
         subs: sub,
       };
     });
+    r.result = [...r.result, da];
   }
 
   res.json(r);
