@@ -92,7 +92,7 @@ app.post("/customer", async function (req, res) {
     type: null,
     sub: false,
     Accounts: 0,
-    result: null,
+    result: [],
     email: "",
   };
   if (!req.body.email && !req.body.id) {
