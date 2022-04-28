@@ -7,6 +7,8 @@ import Subscription from "../component/Subscription";
 import file from "../files/EA_instructions.pdf";
 import { UserC } from "../hook/user";
 
+import Dash from "../component/dashboard";
+
 function Dashboard() {
   const [my, setMy] = useState(true);
   const [sp, setSp] = useState(null);
@@ -96,6 +98,8 @@ function Dashboard() {
           {user && user.accounts.length > 0 && (
             <Accounts acc={user.accounts} rem={removeAccount} />
           )}
+
+          {user.admin >= 1 && <Dash />}
         </div>
       </div>
     </div>

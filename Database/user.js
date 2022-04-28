@@ -42,6 +42,7 @@ const userSchema = new Schema({
       show: { type: Boolean, default: true },
     },
   ],
+  shown: { type: String, required: false },
 });
 
 userSchema.post("findOne", async function (res) {
@@ -92,7 +93,7 @@ userSchema.post("findOne", async function (res) {
 
 const User = model("User", userSchema);
 
-const addUser = async function (email, password) {
+const addUser = async function (email, password, shown) {
   const r = { res: null, err: null };
 
   try {
@@ -103,7 +104,7 @@ const addUser = async function (email, password) {
     } else {
       customer = customer.data[0];
     }
-    const user = new User({ email, password, customerId: customer.id });
+    const user = new User({ email, password, customerId: customer.id, shown });
     r.res = await user.save();
   } catch (err) {
     console.log(err);
@@ -352,6 +353,40 @@ const paypalSubscribe = async function (email, pId, type) {
   return r;
 };
 
+const findAll = async function (admin) {
+  const r = { res: null, err: null };
+  if (!admin) return r;
+
+  const q = admin == 1 ? {} : { shown: admin };
+
+  try {
+    r.res = await User.find(q);
+  } catch (err) {
+    r.err = err.message;
+  }
+
+  console.log("Finding user ... ", r.err);
+  return r;
+};
+
+const setShown = async function (email, shown) {
+  const r = { res: null, err: null };
+
+  try {
+    r.res = await User.updateOne(
+      {
+        email,
+      },
+      { shown }
+    );
+  } catch (err) {
+    r.err = err.message;
+  }
+
+  console.log("Set shown ... ", r.err);
+  return r;
+};
+
 module.exports = {
   addUser,
   findOne,
@@ -366,4 +401,6 @@ module.exports = {
   hideAccount,
   addResult,
   paypalSubscribe,
+  findAll,
+  setShown,
 };

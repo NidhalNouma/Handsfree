@@ -5,9 +5,21 @@ const { resolve } = require("path");
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const User = require("../Database/user");
 
+app.post("/user/all", async function (req, res) {
+  const { admin } = req.body;
+  const r = await User.findAll(admin);
+  res.json(r);
+});
+
+app.post("/user/shown", async function (req, res) {
+  const { email, shown } = req.body;
+  const r = await User.setShown(email, shown);
+  res.json(r);
+});
+
 app.post("/user/add", async function (req, res) {
-  const { email, password } = req.body;
-  const r = await User.addUser(email, password);
+  const { email, password, shown } = req.body;
+  const r = await User.addUser(email, password, shown);
   res.json(r);
 });
 
